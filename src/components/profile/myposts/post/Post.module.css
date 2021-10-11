@@ -1,0 +1,10 @@
+.post__post{
+    margin: 10px 0 ;
+    padding: 20px;
+    background-color: lightslategray;
+    text-align: left;
+}
+
+.post{
+    margin: 20px 0;
+}

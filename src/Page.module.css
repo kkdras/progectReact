@@ -1,0 +1,33 @@
+.page {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.page__container{
+	flex: 1 1 auto;
+	display: flex;
+	background-color: #9b8a6e;
+	padding: 10px 10px 0 10px;
+	align-items: start;
+}
+
+.page__asidewrapper{
+	flex: 0 0 20%;
+	height: auto;
+
+}
+
+.page__dilwrapper{
+	background-color: #625b55;
+	margin: 0 0 0 10px;
+	min-height: 500px;
+	padding: 10px;
+	width: 100%;
+}
+
+.page__profile{
+	flex: 1 1 auto;
+	letter-spacing: 2px;
+	line-height: 1.2;
+}

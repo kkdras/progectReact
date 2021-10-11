@@ -1,0 +1,20 @@
+.header {
+	background-color: #282c34;
+}
+.header__container {
+	height: 60px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.header__logo {
+	height: 40px;
+	width: 120px;
+	display: block;
+}
+.header__title {
+	display: inline-block;
+	color: antiquewhite;
+	font-weight: bold;
+}
+

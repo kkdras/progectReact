@@ -1,0 +1,19 @@
+.dialogs{
+    display: flex;
+}
+.messageWrapper{
+    flex: 1 1 auto;
+    margin: -10px 0;
+}
+.message, .dialogsUser{
+    padding: 10px;
+    background-color: lightslategray;
+    margin: 10px 0;
+}
+.message{
+    margin-left: 10px;
+}
+.dialogsWrapper{
+    flex: 0 0 20%;
+    margin: -10px 0;
+}

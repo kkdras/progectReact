@@ -1,0 +1,27 @@
+.aside{
+    padding: 10px;
+    background-color: #625b55;
+    top: 10px;
+}
+
+.aside__item{
+    background-color: lightslategray;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+.aside__list {
+    margin: -20px 0;
+    text-align: left;
+    display: block;
+}
+
+.aside__link {
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 0;
+    display: inline-block;
+}
+.aside__active{
+    color: darkseagreen;
+}
