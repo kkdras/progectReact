@@ -3,7 +3,7 @@ import './App.css';
 import Header from "./components/header/Header";
 import Aside from "./components/aside/aside";
 import Dilogs from "./components/dilogs/Dilogs";
-import Profile from "./components/profile/myposts/profile";
+import Profile from "./components/profile/profile";
 import music from "./components/music";
 import s from "./Page.module.css";
 import {BrowserRouter, Route} from "react-router-dom";

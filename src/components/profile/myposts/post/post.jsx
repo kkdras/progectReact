@@ -1,5 +1,5 @@
 import s from "./Post.module.css"
-import sp from "./../profile.module.css"
+import sp from "../../profile.module.css"
 function Post(props){
     return (
         <div className={`${sp.profile__post} ${s.post}`}>

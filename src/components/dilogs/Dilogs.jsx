@@ -1,21 +1,6 @@
 import s from "./dilogs.module.css"
-import {NavLink} from "react-router-dom";
-
-function Dialog(props) {
-    return (
-        <div className={s.dialogsUser}>
-            <NavLink to={`dilogs/${props.id}`}>{props.name}</NavLink>
-        </div>
-    )
-}
-
-function Massage(props) {
-    return (
-        <div className={s.message}>
-            {props.m}
-        </div>
-    )
-}
+import Massage from "./Massage/massage";
+import Companion from "./Сompanion/companion";
 
 function Dilogs() {
 
@@ -37,7 +22,7 @@ function Dilogs() {
         <div className={s.dialogs}>
             <div className={s.dialogsWrapper}>
                 {
-                    userData.map(item => <Dialog name={item.name} id={item.id} />)
+                    userData.map(item => <Companion name={item.name} id={item.id} />)
                 }
             </div>
 

@@ -1,6 +1,6 @@
-import s from "../../../Page.module.css";
+import s from "../../Page.module.css";
 import sp from "./profile.module.css";
-import Post from "./post/post";
+import Post from "./myposts/post/post";
 function Profile() {
     let posts = [
         {id: 1, massage: 'Рос гей реэстр', like: 1, dislike: 100},
