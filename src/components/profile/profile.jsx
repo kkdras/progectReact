@@ -1,11 +1,7 @@
 import s from "../../Page.module.css";
 import sp from "./profile.module.css";
 import Post from "./myposts/post/post";
-function Profile() {
-    let posts = [
-        {id: 1, massage: 'Рос гей реэстр', like: 1, dislike: 100},
-        {id: 1, massage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, ut?', like: 1111, dislike: 100},
-    ]
+function Profile(props) {
     return (
         <div className={`${s.page__profile} ${sp.profile}`}>
             <div className={sp.profile__banner}>
@@ -13,7 +9,7 @@ function Profile() {
             </div>
             <div className={sp.profile__content}>
                 {
-                    posts.map(item => <Post massage={item.massage} like={item.like} dis={item.dislike} id={item.id} />)
+                    props.posts.map(item => <Post massage={item.massage} like={item.like} dis={item.dislike} id={item.id} />)
                 }
             </div>
 
