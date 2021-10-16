@@ -8,13 +8,13 @@ function Dilogs(props) {
         <div className={s.dialogs}>
             <div className={s.dialogsWrapper}>
                 {
-                    props.userData.map(item => <Companion name={item.name} id={item.id} />)
+                    props.dilogs.user.map(item => <Companion name={item.name} id={item.id} />)
                 }
             </div>
 
             <div className={s.messageWrapper}>
                 {
-                    props.massageData.map(item => <Massage m={item.massage} id={item.id}/>)
+                    props.dilogs.massage.map(item => <Massage m={item.massage} id={item.id}/>)
                 }
             </div>
         </div>

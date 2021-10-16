@@ -1,6 +1,5 @@
 import s from "./../dilogs.module.css"
 import {NavLink} from "react-router-dom";
-
 function Companion(props) {
     return (
         <div className={s.dialogsUser}>
