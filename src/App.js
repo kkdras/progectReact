@@ -7,6 +7,7 @@ import Profile from "./components/profile/profile";
 import music from "./components/music";
 import s from "./Page.module.css";
 import {BrowserRouter, Route} from "react-router-dom";
+import {addPost} from "./redax/state";
 
 function App(props) {
     return (
@@ -20,8 +21,8 @@ function App(props) {
                         </div>
                         <div className={s.page__dilwrapper}>
 
-                            <Route exact path={"/dilogs"} render={ () => <Dilogs dilogs={props.state.dilogs} /> } />
-                            <Route path={"/profile"} render={() => <Profile posts={props.state.posts} /> }/>
+                            <Route exact path={"/dilogs"} render={() => <Dilogs dilogs={props.state.dilogs}/>} />
+                            <Route path={"/profile"} render={() => <Profile addPost={props.addPost} posts={props.state.posts}/>} />
                             <Route path={"/music"} component={music}/>
                         </div>
                     </div>
