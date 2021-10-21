@@ -2,12 +2,15 @@ import s from "./../profile.module.css";
 import React from "react";
 
 function Info(props) {
+
     let addPostText = React.createRef()
 
     let addPost = () =>{
-        debugger;
-        let text = addPostText.current.value
-        props.addPost(text)
+        props.addPost()
+    }
+    let letterChange = () => {
+        let text = addPostText.current.value;
+        props.updateLetter(text);
     }
 
     //console.log(props.addPost)
@@ -22,7 +25,7 @@ function Info(props) {
                 Add Post:
             </div>
             <div className={s.addPost}>
-                <textarea ref={addPostText} className={s.texarea}></textarea>
+                <textarea ref={addPostText} onChange={letterChange} className={s.texarea} value={props.textarea} ></textarea>
                 <button onClick={() => addPost()} className={s.add}>Add post</button>
             </div>
         </div>

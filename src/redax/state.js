@@ -1,10 +1,18 @@
-import {funcRender} from "../render";
+let funcRender = (one,two,three) => {
+}
+
+export let updateRender = (observer) => {
+    funcRender = observer
+}
 
 let state = {
-    posts: [
-        {id: 1, massage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, ut?', like: 1, dislike: 100},
-        {id: 1, massage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, ut?', like: 1111, dislike: 100},
-    ],
+    profile: {
+        posts: [
+            {id: 1, massage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, ut?', like: 1, dislike: 100},
+            {id: 1, massage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, ut?', like: 1111, dislike: 100},
+        ],
+        textarea: 'рыба текст',
+    },
     dilogs: {
         massage: [
             {id: 1, massage: "Hi, how you are you?"},
@@ -22,14 +30,21 @@ let state = {
     },
 }
 
-export let addPost = (text) => {
+export let addPost = () => {
     let newPost = {
         id: 3,
-        massage: text,
+        massage: state.profile.textarea,
         like: 0,
     }
-    state.posts.push(newPost);
-    funcRender(state,addPost);
+    state.profile.posts.push(newPost);
+    state.profile.textarea = '';
+    funcRender(state,addPost,updateLetter);
+}
+
+export let updateLetter = (text) => {
+    state.profile.textarea = text;
+    console.log(state)
+    funcRender(state,addPost,updateLetter);
 }
 
 export default state;

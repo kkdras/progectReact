@@ -5,7 +5,7 @@ import Info from "./myposts/info";
 function Profile(props) {
     return (
         <div className={`${s.page__profile} ${sp.profile}`}>
-            <Info addPost={props.addPost}/>
+            <Info addPost={props.addPost} textarea={props.textarea} updateLetter={props.updateLetter}/>
             <div className={sp.profile__content}>
                 {
                     props.posts.map(item => <Post massage={item.massage} like={item.like} dis={item.dislike} id={item.id} />)
