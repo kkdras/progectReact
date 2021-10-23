@@ -1,21 +1,21 @@
 import React from 'react';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import state, {addPost,updateLetter,updateRender} from "./redax/state";
+import {store} from "./redax/state";
 import ReactDOM from "react-dom";
 import App from "./App";
 
-let funcRender = (state,addPost,updateLetter) => {
+let funcRender = (store) => {
     ReactDOM.render(
         <React.StrictMode>
-            <App state={state} addPost={addPost} updateLetter={updateLetter}/>
+            <App state={store.state} dispatch={store.dispatch.bind(store)}/>
         </React.StrictMode>,
         document.getElementById('root')
     );
 }
-funcRender(state,addPost,updateLetter);
+funcRender(store);
 
-updateRender(funcRender);
+store.updateRender(funcRender);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

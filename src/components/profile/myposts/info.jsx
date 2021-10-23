@@ -1,16 +1,17 @@
 import s from "./../profile.module.css";
 import React from "react";
+import {createActionAddPost,createActionLetterChange} from "../../../redax/state";
 
 function Info(props) {
 
     let addPostText = React.createRef()
 
-    let addPost = () =>{
-        props.addPost()
+    let addPost = () => {
+        props.dispatch(createActionAddPost())
     }
     let letterChange = () => {
         let text = addPostText.current.value;
-        props.updateLetter(text);
+        props.dispatch(createActionLetterChange(text));
     }
 
     //console.log(props.addPost)

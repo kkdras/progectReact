@@ -21,7 +21,7 @@ function App(props) {
                         <div className={s.page__dilwrapper}>
 
                             <Route exact path={"/dilogs"} render={() => <Dilogs dilogs={props.state.dilogs}/>} />
-                            <Route path={"/profile"} render={() => <Profile addPost={props.addPost} posts={props.state.profile.posts} textarea={props.state.profile.textarea} updateLetter={props.updateLetter}/>} />
+                            <Route path={"/profile"} render={() => <Profile dispatch={props.dispatch} posts={props.state.profile.posts} textarea={props.state.profile.textarea}/>} />
                             <Route path={"/music"} component={music}/>
                         </div>
                     </div>
