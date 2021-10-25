@@ -1,8 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-import Header from "./components/header/Header";
+import Header from "./components/header/header";
 import Aside from "./components/aside/aside";
-import Dilogs from "./components/dilogs/Dilogs";
+import Dialogs from "./components/dilogs/dialogs";
 import Profile from "./components/profile/profile";
 import music from "./components/music";
 import s from "./Page.module.css";
@@ -20,7 +20,7 @@ function App(props) {
                         </div>
                         <div className={s.page__dilwrapper}>
 
-                            <Route exact path={"/dilogs"} render={() => <Dilogs dilogs={props.state.dilogs}/>} />
+                            <Route exact path={"/dilogs"} render={() => <Dialogs newMassageText={props.state.dilogs.newMassageText} dispatch={props.dispatch} dilogs={props.state.dilogs}/>} />
                             <Route path={"/profile"} render={() => <Profile dispatch={props.dispatch} posts={props.state.profile.posts} textarea={props.state.profile.textarea}/>} />
                             <Route path={"/music"} component={music}/>
                         </div>

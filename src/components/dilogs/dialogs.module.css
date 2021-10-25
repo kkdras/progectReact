@@ -3,15 +3,18 @@
 }
 .messageWrapper{
     flex: 1 1 auto;
-    margin: -10px 0;
+    margin: 0 0 0 10px;
 }
 .message, .dialogsUser{
     padding: 10px;
-    background-color: lightslategray;
     margin: 10px 0;
+
+}
+.dialogsUser{
+    background-color: lightslategray;
 }
 .message{
-    margin-left: 10px;
+    background-color:bisque;
 }
 .dialogsWrapper{
     flex: 0 0 20%;

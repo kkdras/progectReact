@@ -1,6 +1,6 @@
 import s from "./../profile.module.css";
 import React from "react";
-import {createActionAddPost,createActionLetterChange} from "../../../redax/state";
+import {createActionAddPost,createActionLetterChange} from "../../../redax/profileReducer";
 
 function Info(props) {
 

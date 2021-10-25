@@ -1,4 +1,4 @@
-import s from "./../dilogs.module.css"
+import s from "../dialogs.module.css"
 
 function Massage(props) {
     return (
