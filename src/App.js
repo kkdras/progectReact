@@ -2,11 +2,12 @@ import logo from './logo.svg';
 import './App.css';
 import Header from "./components/header/header";
 import Aside from "./components/aside/aside";
-import Dialogs from "./components/dilogs/dialogs";
 import Profile from "./components/profile/profile";
 import music from "./components/music";
 import s from "./Page.module.css";
 import {BrowserRouter, Route} from "react-router-dom";
+import DialogsContainer from "./components/dilogs/dialogsContainer";
+import UsersContainer from "./components/users/usersContainer";
 
 function App(props) {
     return (
@@ -20,8 +21,9 @@ function App(props) {
                         </div>
                         <div className={s.page__dilwrapper}>
 
-                            <Route exact path={"/dilogs"} render={() => <Dialogs newMassageText={props.state.dilogs.newMassageText} dispatch={props.dispatch} dilogs={props.state.dilogs}/>} />
-                            <Route path={"/profile"} render={() => <Profile dispatch={props.dispatch} posts={props.state.profile.posts} textarea={props.state.profile.textarea}/>} />
+                            <Route exact path={"/dilogs"} render={() => <DialogsContainer />}/>
+                            <Route path={"/profile"} render={() => <Profile/>}/>
+                            <Route path={"/users"} render={() => <UsersContainer/>}/>
                             <Route path={"/music"} component={music}/>
                         </div>
                     </div>

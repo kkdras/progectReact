@@ -37,16 +37,15 @@ export let store = {
             newMassageText: "",
         },
     },
-    _funcRender(one, two, three) {
+    _funcRender(one) {
     },
-    updateRender(observer) {
+    subscribe(observer) {
         this._funcRender = observer
     },
     get state() {
         return this._state
     },
     dispatch(action){
-        //debugger
         this._state.profile = profileReducer(this._state.profile, action)
         this._state.dilogs = dialogsReducer(this._state.dilogs, action)
 

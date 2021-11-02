@@ -1,20 +1,18 @@
 import s from "./../profile.module.css";
 import React from "react";
-import {createActionAddPost,createActionLetterChange} from "../../../redax/profileReducer";
 
 function Info(props) {
 
     let addPostText = React.createRef()
 
     let addPost = () => {
-        props.dispatch(createActionAddPost())
+        props.addPostContainer()
     }
     let letterChange = () => {
         let text = addPostText.current.value;
-        props.dispatch(createActionLetterChange(text));
+        props.letterChangeContainer(text);
     }
 
-    //console.log(props.addPost)
     return (
         <div className={s.infoWrapper}>
             <div className={s.profile__banner}>
@@ -27,7 +25,7 @@ function Info(props) {
             </div>
             <div className={s.addPost}>
                 <textarea ref={addPostText} onChange={letterChange} className={s.texarea} value={props.textarea} ></textarea>
-                <button onClick={() => addPost()} className={s.add}>Add post</button>
+                <button onClick={addPost} className={s.add}>Add post</button>
             </div>
         </div>
     )

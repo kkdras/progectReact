@@ -1,0 +1,56 @@
+.users__container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+}
+.userWrapper{
+    flex: 1 1 100%;
+    display: flex;
+    padding: 5px;
+    margin: 0 0 10px 0;
+    background-color: #9b8a6e;
+}
+.userLeft{
+    flex: 0 0 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 10px 0 0 ;
+}
+.userImage{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+.userButton{
+    background-color: #625b55;
+    display: inline-block;
+    padding: 5px 10px;
+    color: white;
+    letter-spacing: 2px;
+}
+.userRight{
+    display: flex;
+    justify-content: space-between;
+    flex: 1 1 100%;
+}
+.userRL{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+}
+.userRR{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.userName{
+    display: inline-block;
+    padding: 0 0 10px 0;
+}

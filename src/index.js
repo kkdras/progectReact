@@ -1,21 +1,20 @@
 import React from 'react';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import {store} from "./redax/state";
+import store from "./redax/redax-store";
 import ReactDOM from "react-dom";
 import App from "./App";
+import {Provider} from "react-redux";
 
-let funcRender = (store) => {
-    ReactDOM.render(
-        <React.StrictMode>
-            <App state={store.state} dispatch={store.dispatch.bind(store)}/>
-        </React.StrictMode>,
-        document.getElementById('root')
-    );
-}
-funcRender(store);
 
-store.updateRender(funcRender);
+ReactDOM.render(
+        <Provider store={store}>
+            <App/>
+        </Provider>,
+    document.getElementById('root'))
+
+
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -3,28 +3,27 @@ import Massage from "./massage/massage";
 import Companion from "./companion/companion";
 import profileStyle from "./../profile/profile.module.css";
 import React from "react";
-import {sendMassageCreator,updateNewMassageCreator} from "../../redax/dialogsReducer";
+
 
 function Dialogs(props) {
     let newMassageText = props.newMassageText;
 
     const sendMassageClick = () => {
-        props.dispatch(sendMassageCreator());
+        props.sendMassageClickCreator()
     }
 
     const updateMassageLetter = (e) => {
         let massage = e.target.value
-        props.dispatch(updateNewMassageCreator(massage));
+        props.updateNewMassageBody(massage)
     }
-    
-    
+
     return (
 
         <div className={s.dialogs}>
 
             <div className={s.dialogsWrapper}>
                 {
-                    props.dilogs.user.map(item => <Companion name={item.name} id={item.id} />)
+                    props.user.map(item => <Companion name={item.name} id={item.id} />)
                 }
             </div>
 
@@ -36,7 +35,7 @@ function Dialogs(props) {
                 </div>
 
                 {
-                    props.dilogs.massage.map(item => <Massage m={item.massage} id={item.id}/>)
+                    props.massage.map(item => <Massage m={item.massage} id={item.id}/>)
                 }
             </div>
         </div>
@@ -44,3 +43,5 @@ function Dialogs(props) {
 }
 
 export default Dialogs;
+
+//dispatch={store.dispatch.bind(store)}
