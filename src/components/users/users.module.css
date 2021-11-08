@@ -54,3 +54,13 @@
     display: inline-block;
     padding: 0 0 10px 0;
 }
+.activeCurrentPagination{
+    color: red;
+}
+.loadingContainer{
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -8,11 +8,8 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-    }
-}
 
 
-const MyPostsContainer = connect(mapStateToProps,mapDispatchToProps)(PostContainer)
+
+const MyPostsContainer = connect(mapStateToProps,null)(PostContainer)
 export default MyPostsContainer;

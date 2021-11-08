@@ -1,28 +1,53 @@
 import {connect} from "react-redux";
 import Users from "./users";
-import {followAC, setUsers, unfollowAC} from "../../redax/usersReducer";
+import {
+    setCurrentPage,
+    getUsersCreator, pageChangedCreator, unfollowedCreator, followedCreator
+} from "../../redax/usersReducer";
+import React from "react";
+
+
+class UsersContainer extends React.Component{
+
+    componentDidMount() {
+        this.props.getUsersCreator(this.props.currentPage,this.props.count)
+    }
+    pageChanged = pageNumber => {
+        this.props.setCurrentPage(pageNumber)
+        this.props.pageChangedCreator(pageNumber,this.props.count)
+    }
+
+    render() {
+        return <Users
+            loading={this.props.loading}
+            totalPage={this.props.totalPage}
+            count={this.props.count}
+            pageChanged={this.pageChanged}
+            currentPage={this.props.currentPage}
+            users={this.props.users}
+            followingProgress={this.props.followingProgress}
+            unfollowedCreator={this.props.unfollowedCreator}
+            followedCreator={this.props.followedCreator}
+        />
+    }
+}
 
 let mapStateToProps = (state) => {
     return {
         users: state.usersPage.users,
-    }
-}
-let mapDispatchToProps = (dispatch) => {
-    return {
-        followed(userId){
-            dispatch(followAC(userId))
-        },
-        unFollowed(userId){
-            dispatch(unfollowAC(userId))
-        },
-        setUsersContainer(users){
-            dispatch(setUsers(users))
-        },
+        currentPage: state.usersPage.currentPage,
+        totalPage: state.usersPage.totalPage,
+        count: state.usersPage.count,
+        loading: state.usersPage.isLoading,
+        followingProgress: state.usersPage.followingProgress,
     }
 }
 
+export default connect(mapStateToProps,{
+    setCurrentPage,
+    getUsersCreator,
+    pageChangedCreator,
+    unfollowedCreator,
+    followedCreator,
+})(UsersContainer)
 
-
-let UsersContainer = connect(mapStateToProps,mapDispatchToProps)(Users)
-
-export default UsersContainer;

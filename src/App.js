@@ -1,19 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
-import Header from "./components/header/header";
 import Aside from "./components/aside/aside";
-import Profile from "./components/profile/profile";
 import music from "./components/music";
 import s from "./Page.module.css";
 import {BrowserRouter, Route} from "react-router-dom";
 import DialogsContainer from "./components/dilogs/dialogsContainer";
 import UsersContainer from "./components/users/usersContainer";
+import ProfileContainer from "./components/profile/profileContainer";
+import {HeaderContainerConnect} from "./components/header/headerContainer";
 
 function App(props) {
     return (
         <BrowserRouter>
             <div className="App">
-                <Header/>
+                <HeaderContainerConnect/>
                 <main className={s.page}>
                     <div className={`${s.page__container} _container`}>
                         <div className={s.page__asidewrapper}>
@@ -21,8 +20,8 @@ function App(props) {
                         </div>
                         <div className={s.page__dilwrapper}>
 
-                            <Route exact path={"/dilogs"} render={() => <DialogsContainer />}/>
-                            <Route path={"/profile"} render={() => <Profile/>}/>
+                            <Route path={"/dilogs"} render={() => <DialogsContainer />}/>
+                            <Route path="/profile/:userId?" render={() => <ProfileContainer/>}/>
                             <Route path={"/users"} render={() => <UsersContainer/>}/>
                             <Route path={"/music"} component={music}/>
                         </div>
