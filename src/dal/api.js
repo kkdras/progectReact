@@ -1,5 +1,5 @@
 import axios from "axios";
-let apiKey = "8358ee45-26ad-4b63-8e99-4be48da07514"
+let apiKey = "9cef1f3a-d6dc-4df8-b0f1-cbdab05c42b3"
 let instance = axios.create({
     withCredentials: 'true',
     baseURL:`https://social-network.samuraijs.com/api/1.0/`,
@@ -10,7 +10,17 @@ let instance = axios.create({
 
 export let axiosRequest = {
     header: {
-
+        getLogUser(){
+            return instance.get(`auth/me`).then(response => response.data)
+        },
+        login(email,password,rememberMe){
+            return instance.post(`auth/login`,{email,password,rememberMe})
+                .then(response => response.data)
+        },
+        logout(){
+            return instance.delete(`auth/login`)
+                .then(response => response.data)
+        }
     },
     user:{
         getUsers(currentPage,count){
@@ -26,6 +36,19 @@ export let axiosRequest = {
         },
         follow(id){
             return instance.post(`follow/${id}`).then(response => response.data)
+        }
+    },
+    profile:{
+        getUserProfile(userId){
+            return instance.get(`profile/` + userId).then(response => {
+                return response
+            })
+        },
+        getStatus(userId){
+            return instance.get(`profile/status/${userId}`)
+        },
+        setStatus(string){
+            return instance.put(`profile/status`,{status: string})
         }
     }
 }

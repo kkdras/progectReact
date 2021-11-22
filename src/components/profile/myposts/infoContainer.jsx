@@ -1,27 +1,16 @@
-import {createActionAddPost, createActionLetterChange} from "../../../redax/profileReducer";
-import Info from "./info";
 import {connect} from "react-redux";
-
+import {createActionAddPost, updateStatusProfile} from "../../../redax/profileReducer";
+import Info from "./info";
 
 const mapStateToProps = (state) => {
     return {
         textarea: state.profilePage.textarea,
         userProfile: state.profilePage.userProfile,
+        status: state.profilePage.status,
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addPostContainer() {
-            dispatch(createActionAddPost())
-        },
-        letterChangeContainer(text) {
-            let action = createActionLetterChange(text)
-            dispatch(action);
-        }
-    }
-}
-
-const InfoContainer = connect(mapStateToProps, mapDispatchToProps)(Info)
+const InfoContainer = connect(mapStateToProps, {updateStatusProfile,createActionAddPost})(Info)
 
 export default InfoContainer;
+

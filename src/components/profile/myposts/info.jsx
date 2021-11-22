@@ -1,20 +1,21 @@
 import s from "./../profile.module.css";
 import React from "react";
 import Loading from "../../users/loading";
+import Status from "./post/status/status";
+import {Field, reduxForm} from "redux-form";
+import {Textarea} from "../../utils/forms/textarea";
+import {maxLengthCreator, required} from "../../utils/validations/main";
+
+let maxLength = maxLengthCreator(20)
+
 function Info(props) {
 
-    let addPostText = React.createRef()
-
-    let addPost = () => {
-        props.addPostContainer()
+    let addPost = (data) => {
+        props.createActionAddPost(data.massage)
+        console.log(data)
     }
-    let letterChange = () => {
-        let text = addPostText.current.value;
-        props.letterChangeContainer(text);
-    }
-    //debugger
     if (!props.userProfile){
-        return (<Loading/>)
+        return (<Loading loading={true} />)
     }else {
         return (
             <div className={s.infoWrapper}>
@@ -22,19 +23,24 @@ function Info(props) {
                     <img src={props.userProfile.photos.large} alt=""/>
                 </div>
                 <div className={s.infoText}>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, dolore dolorem eligendi eos esse
-                    laboriosam libero maxime modi voluptates voluptatum. Atque corporis, eos in libero maiores neque
-                    praesentium tempora temporibus.
-                    <br/>
-                    Add Post:
+                    <Status status={props.status} updateStatusProfile={props.updateStatusProfile}/>
                 </div>
                 <div className={s.addPost}>
-                    <textarea ref={addPostText} onChange={letterChange} className={s.texarea}
-                              value={props.textarea}/>
-                    <button onClick={addPost} className={s.add}>Add post</button>
+                    <InfoReduxForm onSubmit={addPost} addPast={addPost}/>
                 </div>
             </div>
         )
     }
 }
+
+let InfoForm = (props) => {
+    return(
+        <form onSubmit={props.handleSubmit}>
+            <Field validate={[required,maxLength]} placeholder={"Введите свое сообщение"} name={'massage'} className={s.texarea} component={Textarea}/>
+            <button className={s.add}>submit</button>
+        </form>
+    )
+}
+let InfoReduxForm = reduxForm({form:"info"})(InfoForm)
+
 export default Info;

@@ -3,20 +3,12 @@ import Massage from "./massage/massage";
 import Companion from "./companion/companion";
 import profileStyle from "./../profile/profile.module.css";
 import React from "react";
+import {Field, reduxForm} from "redux-form";
+import {Textarea} from "../utils/forms/textarea";
+import {maxLengthCreator, required} from "../utils/validations/main";
 
-
+let maxLength = maxLengthCreator(10)
 function Dialogs(props) {
-    let newMassageText = props.newMassageText;
-
-    const sendMassageClick = () => {
-        props.sendMassageClickCreator()
-    }
-
-    const updateMassageLetter = (e) => {
-        let massage = e.target.value
-        props.updateNewMassageBody(massage)
-    }
-
     return (
 
         <div className={s.dialogs}>
@@ -30,10 +22,8 @@ function Dialogs(props) {
             <div className={s.messageWrapper}>
 
                 <div className={profileStyle.addPost}>
-                    <textarea placeholder={"Напиши свое сообщение"} className={profileStyle.texarea} onChange={updateMassageLetter} value={newMassageText}/>
-                    <button onClick={sendMassageClick} className={profileStyle.add}>Add post</button>
+                    <DialogReduxForm onSubmit={(post) => props.sendMassageCreator(post.myMassage)}/>
                 </div>
-
                 {
                     props.massage.map(item => <Massage m={item.massage} id={item.id}/>)
                 }
@@ -41,7 +31,13 @@ function Dialogs(props) {
         </div>
     )
 }
-
+let DialogForm = (props) => {
+    return (
+        <form onSubmit={props.handleSubmit}>
+            <Field validate={[required,maxLength]} placegolder={"Введи свое сообщение"} component={Textarea} name={"myMassage"} className={profileStyle.textarea}/>
+            <button>submit</button>
+        </form>
+    )
+}
+let DialogReduxForm = reduxForm({form:"dialog"})(DialogForm)
 export default Dialogs;
-
-//dispatch={store.dispatch.bind(store)}

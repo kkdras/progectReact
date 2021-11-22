@@ -15,24 +15,14 @@ let initialState = {
         {id: 6, name: "Anton"},
         {id: 7, name: "Maxim"},
     ],
-    newMassageText: "",
 }
 
 export const dialogsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case UPDATE_NEW_MASSAGE:
-
-            return  {
-                ...state,
-                newMassageText: action.massage,
-            }
-
         case SEND_MASSAGE:
-
             return  {
                 ...state,
-                massage: [...state.massage, {id: 3, massage: state.newMassageText}],
-                newMassageText: '',
+                massage: [...state.massage, {id: 3, massage: action.text}],
             }
 
         default:
@@ -40,15 +30,9 @@ export const dialogsReducer = (state = initialState, action) => {
     }
 }
 
-export let sendMassageCreator = () => {
+export let sendMassageCreator = (text) => {
     return {
         type: SEND_MASSAGE,
-    }
-}
-
-export let updateNewMassageCreator = (text) => {
-    return {
-        type: UPDATE_NEW_MASSAGE,
-        massage: text,
+        text,
     }
 }

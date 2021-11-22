@@ -121,6 +121,7 @@ export let getUsersCreator = (currentPage, count) => {
 export let pageChangedCreator = (pageNumber,count) => {
     return dispatch => {
         dispatch(toggleLoading(true))
+        dispatch(setCurrentPage(pageNumber))
         axiosRequest.user.pageChanged(pageNumber,count)
             .then(data => {
                 dispatch(toggleLoading(false))
@@ -144,7 +145,7 @@ export let unfollowedCreator = (itemId) => {
 export let followedCreator = (itemId) => {
     return dispatch => {
         dispatch(followingProgressAC(true,itemId))
-        axiosRequest.user.deleteFollow(itemId).then(data => {
+        axiosRequest.user.follow(itemId).then(data => {
                 if (data.resultCode === 0) {
                     dispatch(followed(itemId))
                 }

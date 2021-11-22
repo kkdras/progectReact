@@ -1,7 +1,8 @@
-const ADD_POST = "ADD_POST";
-const UPDATE_LETTER = "UPDATE_LETTER";
-const SET_USER_PROFILE = "SET_USER_PROFILE"
+import {axiosRequest} from "../dal/api";
 
+const ADD_POST = "ADD_POST";
+const SET_USER_PROFILE = "SET_USER_PROFILE"
+const SET_STATUS = "SET_STATUS"
 
 let initialState = {
     posts: [
@@ -18,30 +19,26 @@ let initialState = {
             dislike: 100
         },
     ],
-    textarea: 'рыба текст',
     userProfile: null,
+    status: ""
 }
 
 export const profileReducer = (state = initialState, action) => {
     switch (action.type) {
-        case UPDATE_LETTER:
-
-            return  {
-                ...state,
-                textarea: action.text,
-            }
-
         case ADD_POST:
-            let massage = state.textarea;
             return  {
                 ...state,
-                posts: [...state.posts,{id: 3, massage: massage, like: 66, dislike: 10}],
-                textarea: "",
+                posts: [...state.posts,{id: 3, massage: action.text, like: 66, dislike: 10}],
             }
         case SET_USER_PROFILE:
             return {
                 ...state,
                 userProfile: action.userProfile,
+            }
+        case SET_STATUS:
+            return {
+                ...state,
+                status: action.status
             }
         default:
             return state
@@ -49,16 +46,10 @@ export const profileReducer = (state = initialState, action) => {
     }
 
 }
-export let createActionAddPost = () => {
+export let createActionAddPost = (text) => {
     return {
         type: ADD_POST,
-    }
-}
-
-export let createActionLetterChange = (text) => {
-    return {
-        type: UPDATE_LETTER,
-        text: text,
+        text,
     }
 }
 
@@ -66,5 +57,43 @@ export let setUserProfile = (userProfile) => {
     return{
         type: SET_USER_PROFILE,
         userProfile,
+    }
+}
+
+export let setStatusProfile = (status) => {
+    return{
+        type: SET_STATUS,
+        status,
+    }
+}
+
+export let getUserProfile = (userId) => {
+    return dispatch => {
+        axiosRequest.profile.getUserProfile(userId)
+            .then(response => {
+                dispatch(setUserProfile(response.data))
+            }
+        )
+    }
+}
+
+export let getStatusProfile = (userId) => {
+    return dispatch => {
+        axiosRequest.profile.getStatus(userId)
+            .then(response => {
+                dispatch (setStatusProfile(response.data))
+            })
+    }
+}
+
+export let updateStatusProfile = (status) => {
+    return dispatch => {
+        axiosRequest.profile.setStatus(status)
+            .then(response => {
+                if (response.data.resultCode === 0){
+                    debugger
+                    dispatch (setStatusProfile(status))
+                }
+            })
     }
 }
