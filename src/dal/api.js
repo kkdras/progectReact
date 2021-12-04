@@ -27,10 +27,6 @@ export let axiosRequest = {
             return instance.get(`users?page=${currentPage}&count=${count}`)
                 .then(response => response.data)
         },
-        pageChanged(pageNumber,count){
-            return instance.get(`users?page=${pageNumber}&count=${count}`)
-                .then(response => response.data)
-        },
         deleteFollow(id){
             return instance.delete(`follow/${id}`).then(response => response.data)
         },
@@ -49,6 +45,13 @@ export let axiosRequest = {
         },
         setStatus(string){
             return instance.put(`profile/status`,{status: string})
+        },
+        setPhoto(photo){
+            let formData = new FormData()
+            formData.append("image",photo)
+            return instance.put("/profile/photo",formData,{
+                headers:{'Content-Type': 'multipart/form-data'}
+            })
         }
     }
 }

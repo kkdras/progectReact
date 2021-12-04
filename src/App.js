@@ -1,10 +1,8 @@
 import './App.css';
 import Aside from "./components/aside/aside";
-import music from "./components/music";
+import {Music} from "./components/music/music";
 import s from "./Page.module.css";
 import {BrowserRouter, Route} from "react-router-dom";
-import DialogsContainer from "./components/dilogs/dialogsContainer";
-import UsersContainer from "./components/users/usersContainer";
 import ProfileContainer from "./components/profile/profileContainer";
 import {HeaderContainerConnect} from "./components/header/headerContainer";
 import Login from "./components/login/login";
@@ -13,6 +11,10 @@ import {connect} from "react-redux";
 import {compose} from "redux";
 import {initializeApplication} from "./redax/appReducer";
 import Loading from "./components/users/loading";
+import React from "react";
+import {Suspense} from "react";
+let DialogsContainer = React.lazy(() => import("./components/dilogs/dialogsContainer"));
+let UsersContainer = React.lazy(() => import("./components/users/usersContainer"));
 
 class App extends Component {
     componentDidMount() {
@@ -32,12 +34,13 @@ class App extends Component {
                                 <Aside/>
                             </div>
                             <div className={s.page__dilwrapper}>
-
-                                <Route path={"/dilogs"} render={() => <DialogsContainer/>}/>
-                                <Route path="/profile/:userId?" render={() => <ProfileContainer/>}/>
-                                <Route path={"/users"} render={() => <UsersContainer/>}/>
-                                <Route path={"/login"} render={() => <Login/>}/>
-                                <Route path={"/music"} component={music}/>
+                                <Suspense fallback={<div>загрузка</div>}>
+                                    <Route path={"/dilogs"} render={() => <DialogsContainer/>}/>
+                                    <Route path="/profile/:userId?" render={() => <ProfileContainer/>}/>
+                                    <Route path={"/users"} render={() => <UsersContainer/>}/>
+                                    <Route path={"/login"} render={() => <Login/>}/>
+                                    <Route path={"/music"} component={() => <Music/>}/>
+                                </Suspense>
                             </div>
                         </div>
                     </main>
@@ -49,6 +52,7 @@ class App extends Component {
 }
 
 let mapStateToProps = state => ({initialized: state.application.initialized})
+
 export default compose(
     connect(mapStateToProps,{initializeApplication})
 )(App)

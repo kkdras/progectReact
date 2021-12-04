@@ -3,6 +3,8 @@ import {axiosRequest} from "../dal/api";
 const ADD_POST = "ADD_POST";
 const SET_USER_PROFILE = "SET_USER_PROFILE"
 const SET_STATUS = "SET_STATUS"
+const SET_PHOTO = "profile/SET_PHOTO"
+
 
 let initialState = {
     posts: [
@@ -19,8 +21,7 @@ let initialState = {
             dislike: 100
         },
     ],
-    userProfile: null,
-    status: ""
+    userProfile: null
 }
 
 export const profileReducer = (state = initialState, action) => {
@@ -40,60 +41,54 @@ export const profileReducer = (state = initialState, action) => {
                 ...state,
                 status: action.status
             }
+        case SET_PHOTO:
+            return {
+                ...state,
+                userProfile: {...state.userProfile, photos: action.photos}
+            }
         default:
             return state
 
     }
 
 }
-export let createActionAddPost = (text) => {
-    return {
-        type: ADD_POST,
-        text,
-    }
-}
+export let createActionAddPost = (text) => ({type: ADD_POST, text})
 
-export let setUserProfile = (userProfile) => {
-    return{
-        type: SET_USER_PROFILE,
-        userProfile,
-    }
-}
+export let setUserProfile = (userProfile) => ({type: SET_USER_PROFILE, userProfile})
 
-export let setStatusProfile = (status) => {
-    return{
-        type: SET_STATUS,
-        status,
-    }
-}
+export let setStatusProfile = (status) => ({type: SET_STATUS, status})
+//action creator для добавления фото в state
+export let setUserPhoto = (photos) => ({type:SET_PHOTO,photos})
 
 export let getUserProfile = (userId) => {
-    return dispatch => {
-        axiosRequest.profile.getUserProfile(userId)
-            .then(response => {
-                dispatch(setUserProfile(response.data))
-            }
-        )
+    return async dispatch => {
+        let response = await axiosRequest.profile.getUserProfile(userId)
+        dispatch(setUserProfile(response.data))
     }
 }
 
 export let getStatusProfile = (userId) => {
-    return dispatch => {
-        axiosRequest.profile.getStatus(userId)
-            .then(response => {
-                dispatch (setStatusProfile(response.data))
-            })
+    return async dispatch => {
+        let response = await axiosRequest.profile.getStatus(userId)
+        dispatch (setStatusProfile(response.data))
     }
 }
 
 export let updateStatusProfile = (status) => {
-    return dispatch => {
-        axiosRequest.profile.setStatus(status)
-            .then(response => {
-                if (response.data.resultCode === 0){
-                    debugger
-                    dispatch (setStatusProfile(status))
-                }
-            })
+    return async dispatch => {
+        let response = await axiosRequest.profile.setStatus(status)
+        if (response.data.resultCode === 0){
+            dispatch (setStatusProfile(status))
+        }
+    }
+}
+
+export let setPhotoProfile = (photo) => {
+
+    return async dispatch => {
+        let response = await axiosRequest.profile.setPhoto(photo)
+        if(response.data.resultCode === 0){
+            dispatch(setUserPhoto(response.data.data.photos))
+        }
     }
 }

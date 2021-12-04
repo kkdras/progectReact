@@ -4,54 +4,45 @@ import {
     setCurrentPage,
     getUsersCreator, pageChangedCreator, unfollowedCreator, followedCreator
 } from "../../redax/usersReducer";
-import React from "react";
+import React, {useEffect} from "react";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
-import {getUsersSelectors} from "../../redax/usersSelectors";
+import {
+    getCountSelectors,
+    getCurrentPageSelectors, getFollowingProgressSelectors, getIsLoadingSelectors,
+    getTotalPageSelectors,
+    getUsersSelectors
+} from "../../redax/usersSelectors";
 
-class UsersContainer extends React.Component{
+let UsersContainer = (props) => {
+    useEffect(() => {
+        props.getUsersCreator(props.currentPage,props.count)
+    }, [])
 
-    componentDidMount() {
-        this.props.getUsersCreator(this.props.currentPage,this.props.count)
-    }
-    pageChanged = pageNumber => {
-        //this.props.setCurrentPage(pageNumber)
-        this.props.pageChangedCreator(pageNumber,this.props.count)
+    let pageChanged = pageNumber => {
+        props.pageChangedCreator(pageNumber,props.count)
     }
 
-    render() {
-        return <Users
-            loading={this.props.loading}
-            totalPage={this.props.totalPage}
-            count={this.props.count}
-            pageChanged={this.pageChanged}
-            currentPage={this.props.currentPage}
-            users={this.props.users}
-            followingProgress={this.props.followingProgress}
-            unfollowedCreator={this.props.unfollowedCreator}
-            followedCreator={this.props.followedCreator}
-        />
-    }
+    return <Users
+        loading={props.loading}
+        totalPage={props.totalPage}
+        count={props.count}
+        pageChanged={pageChanged}
+        currentPage={props.currentPage}
+        users={props.users}
+        followingProgress={props.followingProgress}
+        unfollowedCreator={props.unfollowedCreator}
+        followedCreator={props.followedCreator}
+    />
 }
-/*let mapStateToProps = (state) => {
-    return {
-        users: state.usersPage.users,
-        currentPage: state.usersPage.currentPage,
-        totalPage: state.usersPage.totalPage,
-        count: state.usersPage.count,
-        loading: state.usersPage.isLoading,
-        followingProgress: state.usersPage.followingProgress,
-    }
-}*/
-
 let mapStateToProps = (state) => {
     return {
         users: getUsersSelectors(state),
-        currentPage: state.usersPage.currentPage,
-        totalPage: state.usersPage.totalPage,
-        count: state.usersPage.count,
-        loading: state.usersPage.isLoading,
-        followingProgress: state.usersPage.followingProgress,
+        currentPage: getCurrentPageSelectors(state),
+        totalPage: getTotalPageSelectors(state),
+        count: getCountSelectors(state),
+        loading: getIsLoadingSelectors(state),
+        followingProgress: getFollowingProgressSelectors(state),
     }
 }
 

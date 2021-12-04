@@ -1,5 +1,6 @@
 import sp from "../../profile.module.css";
 import Post from "./post";
+import React from "react";
 
 function PostContainer(props){
     return (

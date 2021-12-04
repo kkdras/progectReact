@@ -1,8 +1,5 @@
-import {connect} from "react-redux";
-import {createActionAddPost, updateStatusProfile} from "../../../redax/profileReducer";
-import Info from "./info";
-
-const mapStateToProps = (state) => {
+import {connect,} from "react-redux";
+/*const mapStateToProps = (state) => {
     return {
         textarea: state.profilePage.textarea,
         userProfile: state.profilePage.userProfile,
@@ -10,7 +7,22 @@ const mapStateToProps = (state) => {
     }
 }
 
-const InfoContainer = connect(mapStateToProps, {updateStatusProfile,createActionAddPost})(Info)
+const InfoContainer = connect(mapStateToProps, {setPhotoProfile,updateStatusProfile,createActionAddPost})(<Info />)
 
-export default InfoContainer;
+export default InfoContainer;*/
 
+import {
+    createActionAddPost,
+    setPhotoProfile,
+    updateStatusProfile
+} from "../../../redax/profileReducer";
+import Info from "./info";
+
+
+export let InfoContainer = (props) => {
+    debugger
+    return <Info isOwn={props.isOwn}
+                 createActionAddPost={createActionAddPost}
+                 setPhotoProfile={setPhotoProfile}
+                 updateStatusProfile={updateStatusProfile}/>
+}
