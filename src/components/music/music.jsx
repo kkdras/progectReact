@@ -1,34 +1,44 @@
 import style from "./musicStyles.module.css"
-import {useContext, useRef, useState} from "react";
+import {useContext, useEffect , useReducer, useState} from "react";
 import React from "react";
-let MusicContext = React.createContext("mydindindon")
-export let Music = () => {
-    let state = useRef("определенная строка")
-    let [tmp,setTmp] = useState()
-    return (
-        <MusicContext.Provider value={state}>
-            <MusicWrapper/>
-            <input type="text" value={tmp} onChange={event => setTmp(event.target.value)}/>
-        </MusicContext.Provider>
-    )
+//let MusicContext = React.createContext("mydindindon")
+
+function useReducer1(reducer, initialState) {
+    const [state, setState] = useState(initialState);
+
+    function dispatch(action) {
+        const nextState = reducer(state, action);
+        setState(nextState);
+    }
+
+    return [state, dispatch];
 }
 
-let MusicWrapper = (props) => {
-    console.log("случайный рендер")
-    let value = useContext(MusicContext)
-    let [state,setState] = useState("Я внутренний контейнер")
-    let onsubmit = (e) => {
-        e.preventDefault()
-        value.current = state
-    }
-    return (<>
-            <div style={{color: "red"}}>{value.current}</div>
-            <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut blanditiis consequatur ducimus est eum hic ipsum iste odit quam repellendus!</div>
-            <input value={state} onChange={e => {
-                setState(e.target.value)
-                console.log("render fro input")
-            }} className={style.button__style} type="text"/>
-            <button type={"submit"} onClick={onsubmit}>отправить</button>
-        </>
-    )
+let initialState = {
+    count: 0
 }
+let reducer = (state,action) => {
+    if(action.type === "tick"){
+        return {count: state.count + 1}
+    }
+}
+
+export let Music = () => {
+    let [state,dispatch] = useReducer1(reducer,initialState);
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            console.log('You clicked on: ' + state.count);
+            dispatch({ type: "tick" });
+
+        }, 1000);
+        return () => clearInterval(id);
+    }, []);
+
+    return (
+        <div>
+            <p>You clicked {state.count} times</p>
+        </div>
+    );
+}
+

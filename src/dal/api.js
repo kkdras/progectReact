@@ -1,5 +1,5 @@
 import axios from "axios";
-let apiKey = "9cef1f3a-d6dc-4df8-b0f1-cbdab05c42b3"
+let apiKey = "2a53a8d7-9713-4730-bda2-40c41c92534f"
 let instance = axios.create({
     withCredentials: 'true',
     baseURL:`https://social-network.samuraijs.com/api/1.0/`,
@@ -13,8 +13,8 @@ export let axiosRequest = {
         getLogUser(){
             return instance.get(`auth/me`).then(response => response.data)
         },
-        login(email,password,rememberMe){
-            return instance.post(`auth/login`,{email,password,rememberMe})
+        login(email,password,rememberMe,captcha = null){
+            return instance.post(`auth/login`,{email,password,rememberMe,captcha})
                 .then(response => response.data)
         },
         logout(){
@@ -52,6 +52,14 @@ export let axiosRequest = {
             return instance.put("/profile/photo",formData,{
                 headers:{'Content-Type': 'multipart/form-data'}
             })
+        },
+        setDiscription(data){
+            return instance.put("profile",data)
+        }
+    },
+    auth:{
+        getCaptcha(){
+            return instance.get("/security/get-captcha-url")
         }
     }
 }

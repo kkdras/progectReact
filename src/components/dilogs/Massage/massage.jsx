@@ -1,10 +1,8 @@
 import s from "../dialogs.module.css"
 
-function Massage(props) {
+function Message({message}) {
     return (
-        <div className={s.message}>
-            {props.m}
-        </div>
+        <div className={s.message}>{message}</div>
     )
 }
-export default Massage;
+export default Message;

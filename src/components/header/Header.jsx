@@ -1,5 +1,7 @@
 import s from "./header.module.css"
+import {useDispatch} from "react-redux";
 function Header(props) {
+    let dispatch = useDispatch()
     return (
         <div className={s.header}>
             <div className={`${s.header__container} _container`}>
@@ -8,9 +10,8 @@ function Header(props) {
                 </a>
                 <a href={"#"} className={s.header__title}>
                     {(props.isLog)?
-                        <button onClick={() => props.logoutCreator()}>logout</button>
+                        <button onClick={() => dispatch(props.logoutCreator())}>logout</button>
                         : "Go to log"}
-
                 </a>
             </div>
         </div>

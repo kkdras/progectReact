@@ -1,13 +1,15 @@
 import {axiosRequest} from "../dal/api";
-import {stopSubmit} from "redux-form";
 
 let CONNECT = "CONNECT"
+let CAPTCHA ="auth/CAPTCHA"
+
 
 let initialState = {
     userId: null,
     email: null,
     login: null,
-    isLog: false
+    isLog: false,
+    urlCaptcha: null
 }
 
 export const authReducer = (state = initialState, action) => {
@@ -18,24 +20,19 @@ export const authReducer = (state = initialState, action) => {
                 ...action.data,
                 isLog: action.data.isLog,
             }
-
+        case CAPTCHA:
+            return {
+                ...state,
+                urlCaptcha:action.payload
+            }
         default:
             return state
 
     }
 
 }
-export let toLoginAC = (userId,login,email,isLog) => {
-    return {
-        type: CONNECT,
-        data:{
-            userId,
-            login,
-            email,
-            isLog,
-        }
-    }
-}
+export let toLoginAC = (userId,login,email,isLog) => ({type: CONNECT, data:{userId, login, email, isLog,}})
+export let setCaptcha = (urlCaptcha) => ({type:CAPTCHA,payload: urlCaptcha})
 
 export let requestCreator = () => {
     return dispatch => {
@@ -50,25 +47,32 @@ export let requestCreator = () => {
     }
 }
 
-export let loginCreator= (email,password,rememberMe) => {
-    return dispatch => {
-        axiosRequest.header.login(email,password,rememberMe)
-            .then(data => {
-                    if (data.resultCode === 0) {
-                        dispatch(requestCreator())
-                    }else{
-                        let massage = data.messages.length > 0 ? data.messages[0] : "Some error"
-                        let action = stopSubmit("login", {_error: massage});
-                        dispatch(action)
-                    }
-                }
-            )
+let getCaptcha = () => {
+    return async dispacth => {
+        let response = await axiosRequest.auth.getCaptcha()
+        dispacth(setCaptcha(response.data.url))
+    }
+}
+
+export let loginCreator = (email,password,rememberMe,captcha) => {
+    return async dispatch => {
+        debugger
+        let response = await axiosRequest.header.login(email,password,rememberMe,captcha)
+        if (response.resultCode === 0) {
+            dispatch(requestCreator())
+            debugger
+        }
+        else{
+            debugger
+            if(response.resultCode === 10){
+                dispatch(getCaptcha())
+            }
+        }
     }
 }
 
 export let logoutCreator = () => {
     return dispatch => {
-        console.log("dfsdfd")
         axiosRequest.header.logout()
             .then(data => {
                     if (data.resultCode === 0) {

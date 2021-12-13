@@ -13,7 +13,10 @@ export const appReducer = (state = initialState, action) => {
                 ...state,
                 initialized: true,
             }
-
+        case "fake":
+            return {
+                ...state
+            }
         default:
             return state
 

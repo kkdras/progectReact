@@ -1,43 +1,56 @@
 import s from "./dialogs.module.css"
-import Massage from "./massage/massage";
+import Message from "./massage/massage";
 import Companion from "./companion/companion";
 import profileStyle from "./../profile/profile.module.css";
 import React from "react";
-import {Field, reduxForm} from "redux-form";
-import {Textarea} from "../utils/forms/textarea";
-import {maxLengthCreator, required} from "../utils/validations/main";
+import {useDispatch, useSelector} from "react-redux";
+import {useForm} from "react-hook-form";
+import {sendMassageCreator} from "../../redax/dialogsReducer";
+import {useWithAuthRedirect} from "../../hoc/withAuthRedirect";
+import {createSelector} from "reselect";
 
-let maxLength = maxLengthCreator(10)
-function Dialogs(props) {
+let messageSelector = createSelector(
+    (state) => state.dialogsPage.message,
+    (massages) => massages.filter(item => true)
+)
+
+let Dialogs = ({sendMassageCreator}) => {
+    let message = useSelector((state) => state.dialogsPage.message.filter(item => true))
+    let user = useSelector(state => state.dialogsPage.user)
+    let dispatch = useDispatch()
+    useWithAuthRedirect()
+    console.log("render")
     return (
-
         <div className={s.dialogs}>
-
             <div className={s.dialogsWrapper}>
                 {
-                    props.user.map(item => <Companion name={item.name} id={item.id} />)
+                    user.map(item => <Companion name={item.name} id={item.id} />)
                 }
             </div>
-
             <div className={s.messageWrapper}>
-
                 <div className={profileStyle.addPost}>
-                    <DialogReduxForm onSubmit={(post) => props.sendMassageCreator(post.myMassage)}/>
+                    <DialogForm submitForm={(data) => dispatch(sendMassageCreator(data.message))}/>
                 </div>
                 {
-                    props.massage.map(item => <Massage m={item.massage} id={item.id}/>)
+                    message.map(item => <Message message={item.message}/>)
                 }
             </div>
         </div>
     )
 }
-let DialogForm = (props) => {
+let DialogForm = ({submitForm}) => {
+    let {handleSubmit,register,formState:{errors}} = useForm()
     return (
-        <form onSubmit={props.handleSubmit}>
-            <Field validate={[required,maxLength]} placegolder={"Введи свое сообщение"} component={Textarea} name={"myMassage"} className={profileStyle.textarea}/>
+        <form onSubmit={handleSubmit(submitForm)}>
+            <input placeholder={"Введи свое сообщение"} {...register("message", {maxLength: {
+                value: 20,
+                    message:"Пожалуйста поменьше букв"
+                }})} className={profileStyle.textarea}/>
+            {errors.message && <p>{errors.message.message}</p>}
             <button>submit</button>
         </form>
     )
 }
-let DialogReduxForm = reduxForm({form:"dialog"})(DialogForm)
-export default Dialogs;
+export let DialogsContainer = () => {
+    return <Dialogs sendMassageCreator={sendMassageCreator}/>
+}

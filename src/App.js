@@ -1,58 +1,58 @@
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import React from "react";
+import {Suspense} from "react";
+
 import './App.css';
 import Aside from "./components/aside/aside";
 import {Music} from "./components/music/music";
 import s from "./Page.module.css";
-import {BrowserRouter, Route} from "react-router-dom";
 import ProfileContainer from "./components/profile/profileContainer";
-import {HeaderContainerConnect} from "./components/header/headerContainer";
+import {HeaderContainer} from "./components/header/headerContainer";
 import Login from "./components/login/login";
-import {Component} from "react";
-import {connect} from "react-redux";
-import {compose} from "redux";
 import {initializeApplication} from "./redax/appReducer";
 import Loading from "./components/users/loading";
-import React from "react";
-import {Suspense} from "react";
-let DialogsContainer = React.lazy(() => import("./components/dilogs/dialogsContainer"));
+import {DialogsContainer} from "./components/dilogs/dialogs"
+//let DialogsContainer = React.lazy(() => import("./components/dilogs/dialogs/DialogsContainer"));
 let UsersContainer = React.lazy(() => import("./components/users/usersContainer"));
 
-class App extends Component {
-    componentDidMount() {
-        this.props.initializeApplication()
+
+export let App = ({}) => {
+    let initialized = useSelector(state => state.application.initialized)
+    let dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(initializeApplication())
+    },[])
+    if(!initialized){
+        return <Loading loading={true}/>
     }
-    render() {
-        if(!this.props.initialized){
-            return <Loading loading={true}/>
-        }
-        return (
-            <BrowserRouter>
-                <div className="App">
-                    <HeaderContainerConnect/>
-                    <main className={s.page}>
-                        <div className={`${s.page__container} _container`}>
-                            <div className={s.page__asidewrapper}>
-                                <Aside/>
-                            </div>
-                            <div className={s.page__dilwrapper}>
-                                <Suspense fallback={<div>загрузка</div>}>
-                                    <Route path={"/dilogs"} render={() => <DialogsContainer/>}/>
+    return (
+        <BrowserRouter>
+            <div className="App">
+                <HeaderContainer/>
+                <main className={s.page}>
+                    <div className={`${s.page__container} _container`}>
+                        <div className={s.page__asidewrapper}>
+                            <Aside/>
+                        </div>
+                        <div className={s.page__dilwrapper}>
+                            <Suspense fallback={<div>загрузка</div>}>
+                                <Switch>
+                                    <Redirect exact from="/" to="/profile" />
+                                    <Route path={"/dialogs"} render={() => <DialogsContainer/>}/>
                                     <Route path="/profile/:userId?" render={() => <ProfileContainer/>}/>
                                     <Route path={"/users"} render={() => <UsersContainer/>}/>
                                     <Route path={"/login"} render={() => <Login/>}/>
                                     <Route path={"/music"} component={() => <Music/>}/>
-                                </Suspense>
-                            </div>
+                                    <Route path={"/!*"} component={() => <div>404 not found</div>}/>
+                                </Switch>
+                            </Suspense>
                         </div>
-                    </main>
-                    <footer className="footer"></footer>
-                </div>
-            </BrowserRouter>
-        );
-    }
+                    </div>
+                </main>
+                <footer className="footer"></footer>
+            </div>
+        </BrowserRouter>
+    );
 }
-
-let mapStateToProps = state => ({initialized: state.application.initialized})
-
-export default compose(
-    connect(mapStateToProps,{initializeApplication})
-)(App)

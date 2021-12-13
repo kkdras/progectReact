@@ -1,5 +1,5 @@
-import {connect} from "react-redux";
-import {Redirect} from "react-router-dom";
+import {connect, useSelector} from "react-redux";
+import {Redirect, useHistory} from "react-router-dom";
 import React from "react";
 
 export let withAuthRedirect = (Component) => {
@@ -17,4 +17,12 @@ export let withAuthRedirect = (Component) => {
         }
     }
     return connect(mapStateToProps, null)(ComponentWrapper)
+}
+
+export let useWithAuthRedirect = () => {
+    let isLog = useSelector(state => state.auth.isLog)
+    let history = useHistory()
+    if(!isLog) {
+        history.push("/login")
+    }
 }

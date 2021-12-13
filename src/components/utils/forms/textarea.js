@@ -16,4 +16,3 @@ export let Input = ({input,meta, ...props}) => {
         </div>
     )
 }
-

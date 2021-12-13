@@ -48,13 +48,14 @@ let Status = (props) => {
         changeStatus(e.currentTarget.value);
     }
     useEffect(() => {changeStatus(props.status)},[props.status])
-    if (!isRender) {
-        return<div onDoubleClick={() => toggleRender(true)}>{props.status || "Нет статуса"}</div>
-    }
-    if (isRender){
-        return <input onChange={onStatusChange} value={status} autoFocus={true} onBlur={() => toggleRender(false)} type="text"/>
-    }
-
+    return (
+        <div>
+            {isRender
+                ? <input onChange={onStatusChange} value={status} autoFocus={true} onBlur={() => toggleRender(false)}
+                         type="text"/>
+                : <div onDoubleClick={() => toggleRender(true)}>{props.status || "Нет статуса"}</div>}
+        </div>
+    )
 }
 
 export default Status

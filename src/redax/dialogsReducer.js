@@ -1,10 +1,10 @@
-const UPDATE_NEW_MASSAGE = "UPDATE_NEW_MASSAGE";
+// const UPDATE_NEW_MASSAGE = "UPDATE_NEW_MASSAGE";
 const SEND_MASSAGE = "SEND_MASSAGE";
 
 let initialState = {
-    massage: [
-        {id: 1, massage: "Hi, how you are you?"},
-        {id: 2, massage: "Good"},
+    message: [
+        {id: 1, message: "Hi, how you are you?"},
+        {id: 2, message: "Good"},
     ],
     user: [
         {id: 1, name: "Polina"},
@@ -22,7 +22,7 @@ export const dialogsReducer = (state = initialState, action) => {
         case SEND_MASSAGE:
             return  {
                 ...state,
-                massage: [...state.massage, {id: 3, massage: action.text}],
+                message: [...state.message, {id: 3, message: action.text}],
             }
 
         default:

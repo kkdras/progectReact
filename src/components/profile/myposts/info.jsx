@@ -6,14 +6,16 @@ import {Field, reduxForm} from "redux-form";
 import {Textarea} from "../../utils/forms/textarea";
 import {maxLengthCreator, required} from "../../utils/validations/main";
 import {useDispatch, useSelector} from "react-redux";
+import {AboutForm, AboutMe} from "./profileForm/profileForm";
+import {useForm} from "react-hook-form";
 
 let maxLength = maxLengthCreator(20)
+
 
 function Info(props) {
     let userProfile = useSelector(state => state.profilePage.userProfile)
     let status =  useSelector(state => state.profilePage.status)
-
-
+    let edit = useSelector(state => state.profilePage.editMode)
     let dispatch = useDispatch()
     let addPost = (data) => {
         dispatch(props.createActionAddPost(data.massage))
@@ -37,7 +39,11 @@ function Info(props) {
                     <Status status={status} updateStatusProfile={props.updateStatusProfile}/>
                 </div>
                 <div className={s.addPost}>
-                    <InfoReduxForm onSubmit={addPost} addPast={addPost}/>
+                    <InfoReduxForm onSubmit={addPost}/>
+                    {edit ||<AboutMe {...userProfile}/>}
+                    {!props.isOwn && !edit && <button onClick={() => dispatch(props.toggleEditMode())}>Отредактировать мои данные</button>}
+                    {!props.isOwn && edit && <AboutForm userProfile={userProfile}
+                        putProfileObject={props.putProfileObject}/>}
                 </div>
             </div>
         )
@@ -53,5 +59,7 @@ let InfoForm = (props) => {
     )
 }
 let InfoReduxForm = reduxForm({form:"info"})(InfoForm)
-
 export default Info;
+
+
+

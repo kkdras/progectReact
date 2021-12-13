@@ -1,50 +1,48 @@
 import style from "./login.module.css"
-import {reduxForm} from "redux-form";
-import {Field} from "redux-form";
-import {required} from "../utils/validations/main";
-import {Input} from "../utils/forms/textarea";
-import {connect} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {loginCreator, logoutCreator} from "../../redax/authReducer";
-import {Redirect} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
+import {useForm} from "react-hook-form";
 
 
 let Login = (props) => {
+    let history = useHistory()
+    let isLog = useSelector(state => state.auth.isLog)
     let onSubmit = (data) => {
-        props.loginCreator(data.login,data.password,data.rememberMe)
+        props.loginCreator(data.login,data.password,data.rememberMe,data.captcha)
     }
-    if (props.isLog){
-        return <Redirect to="/profile"/>
+    if (isLog){
+        history.push("/profile")
     }
     return (
         <div className={style.loginWrapper}>
-            <LoginReduxForm onSubmit={onSubmit}/>
+            <LoginForm onSubmit={onSubmit}/>
         </div>
     )
 }
 let LoginForm = (props) => {
+    const { register, handleSubmit, formState: {errors}} = useForm();
+    let captchaUrl = useSelector(state => state.auth.urlCaptcha)
+    //console.log(errors)
     return (
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={handleSubmit(props.onSubmit)}>
             <div>
-                <Field validate={[required]} placegolder="login" name={'login'} component={Input}/>
+                <input {...register("login",{maxLength:{value:25,message:"слишком много букв"}})} placeholder={"login"} name={'login'} />
+                <span>{errors?.login?.message}</span>
             </div>
             <div>
-                <Field validate={[required]} placegolder="Password" name={'password'} component={Input}/>
+                <input {...register("password")} placeholder={"password"} name={'password'} />
             </div>
             <div>
-                <Field type={"checkbox"} name={'rememberMe'} component={"input"}/>remember me
+                <input type={"checkbox"} {...register("rememberMe")} name={'rememberMe'}/>remember me
             </div>
-            {props.error && <div className={style.fieldError}>{props.error}</div>}
+            {!!captchaUrl && <img src={captchaUrl} alt=""/>}
+            {!!captchaUrl && <input type="text" {...register("captcha")}/>}
             <div>
                 <button>submit</button>
             </div>
         </form>
     )
 }
-let LoginReduxForm = reduxForm({form: "login"})(LoginForm)
-let mapStateToProps = (state) => {
-    return {
-        isLog: state.auth.isLog
-    }
-}
 
-export default connect(mapStateToProps,{loginCreator,logoutCreator})(Login)
+export default connect(null,{loginCreator,logoutCreator})(Login)
