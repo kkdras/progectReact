@@ -14,8 +14,9 @@ import Login from "./components/login/login";
 import {initializeApplication} from "./redax/appReducer";
 import Loading from "./components/users/loading";
 import {DialogsContainer} from "./components/dilogs/dialogs"
-//let DialogsContainer = React.lazy(() => import("./components/dilogs/dialogs/DialogsContainer"));
-let UsersContainer = React.lazy(() => import("./components/users/usersContainer"));
+import {Users} from "./components/users/users"
+//let DialogsContainer = React.lazy(() => import("./components/dilogs/dialogs"));
+//let UsersContainer = React.lazy(() => import("./components/users/users"));
 
 
 export let App = ({}) => {
@@ -42,7 +43,7 @@ export let App = ({}) => {
                                     <Redirect exact from="/" to="/profile" />
                                     <Route path={"/dialogs"} render={() => <DialogsContainer/>}/>
                                     <Route path="/profile/:userId?" render={() => <ProfileContainer/>}/>
-                                    <Route path={"/users"} render={() => <UsersContainer/>}/>
+                                    <Route path={"/users"} render={() => <Users/>}/>
                                     <Route path={"/login"} render={() => <Login/>}/>
                                     <Route path={"/music"} component={() => <Music/>}/>
                                     <Route path={"/!*"} component={() => <div>404 not found</div>}/>

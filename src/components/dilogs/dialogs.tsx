@@ -2,24 +2,23 @@ import s from "./dialogs.module.css"
 import Message from "./massage/massage";
 import Companion from "./companion/companion";
 import profileStyle from "./../profile/profile.module.css";
-import React from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, {FC} from "react";
 import {useForm} from "react-hook-form";
-import {sendMassageCreator} from "../../redax/dialogsReducer";
+import {sendMassageCreator, sendMessage} from "../../redax/dialogsReducer";
 import {useWithAuthRedirect} from "../../hoc/withAuthRedirect";
-import {createSelector} from "reselect";
+import {useTypesSelector} from "../../types/hooks";
+import {useDispatch} from "react-redux";
 
-let messageSelector = createSelector(
-    (state) => state.dialogsPage.message,
-    (massages) => massages.filter(item => true)
-)
 
-let Dialogs = ({sendMassageCreator}) => {
-    let message = useSelector((state) => state.dialogsPage.message.filter(item => true))
-    let user = useSelector(state => state.dialogsPage.user)
-    let dispatch = useDispatch()
+type DialogsType = {
+    sendMassageCreator: (payload:string) => sendMessage
+}
+
+let Dialogs:FC<DialogsType> = ({sendMassageCreator}) => {
     useWithAuthRedirect()
-    console.log("render")
+    let message = useTypesSelector(state => state.dialogsPage.message)
+    let user = useTypesSelector(state => state.dialogsPage.user)
+    let dispatch = useDispatch()
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsWrapper}>
@@ -38,7 +37,12 @@ let Dialogs = ({sendMassageCreator}) => {
         </div>
     )
 }
-let DialogForm = ({submitForm}) => {
+
+interface DialogForm {
+    submitForm: (data: any) => void
+}
+
+let DialogForm:FC<DialogForm> = ({submitForm}) => {
     let {handleSubmit,register,formState:{errors}} = useForm()
     return (
         <form onSubmit={handleSubmit(submitForm)}>
@@ -51,6 +55,8 @@ let DialogForm = ({submitForm}) => {
         </form>
     )
 }
+
+
 export let DialogsContainer = () => {
     return <Dialogs sendMassageCreator={sendMassageCreator}/>
 }

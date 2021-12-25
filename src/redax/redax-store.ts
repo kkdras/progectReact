@@ -4,7 +4,6 @@ import {dialogsReducer} from "./dialogsReducer";
 import {userReducer} from "./usersReducer";
 import {authReducer} from "./authReducer";
 import thunkMiddleware from "redux-thunk";
-import {reducer as formReducer } from 'redux-form';
 import {appReducer} from "./appReducer";
 
 let reducers = combineReducers({
@@ -13,9 +12,10 @@ let reducers = combineReducers({
     usersPage: userReducer,
     auth: authReducer,
     application: appReducer,
-    form: formReducer,
 })
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-let store = createStore(reducers,composeEnhancers(applyMiddleware(thunkMiddleware)))
 
+export type RootState = ReturnType<typeof reducers>
+
+const composeEnhancers = (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+let store = createStore(reducers,composeEnhancers(applyMiddleware(thunkMiddleware)))
 export default store;

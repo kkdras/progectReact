@@ -1,11 +1,18 @@
 import styles from "./pagianor.module.css"
-import {useMemo, useState} from "react";
+import {FC, useMemo, useState} from "react";
 import cn from "classnames";
 
-export let Paginator = (props) => {
-    let pageCount = Math.ceil(props.totalPage / props.count);
+type PropsType = {
+    portionSize: number
+    totalPage:number
+    currentPage: number
+    count:number
+    pageChanged: (pageNumber: number) => void
+}
 
-    let createArrForPagination = (pageCount) => {
+export let Paginator:FC<PropsType> = (props) => {
+    let pageCount = Math.ceil(props.totalPage / props.count);
+    let createArrForPagination = (pageCount: number) => {
         console.log("требовательная функция")
         let tmp = [];
         for (let i = 1; i <= pageCount; i++) {

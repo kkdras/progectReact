@@ -1,7 +1,18 @@
 import styles from "./users.module.css";
 import {NavLink} from "react-router-dom";
+import {usersType} from "../../types/types";
+import {FC} from "react";
+import {useDispatch} from "react-redux";
 
-export let User = ({item,followingProgress,unfollowedCreator,followedCreator}) => {
+type UserType = {
+    item: usersType
+    followingProgress: Array<number>
+    unfollowedCreator: (itemId: number) => void
+    followedCreator: (itemId: number) => void
+}
+
+export let User:FC<UserType> = ({item,followingProgress,unfollowedCreator,followedCreator}) => {
+    let dispatch = useDispatch()
     return (<div className={styles.users__container}>
         <div className={styles.userWrapper}>
             <div className={styles.userLeft}>
@@ -10,10 +21,10 @@ export let User = ({item,followingProgress,unfollowedCreator,followedCreator}) =
 
                 {item.followed ?
                     <button disabled={followingProgress.some(id => id === item.id)} onClick={
-                        () => {unfollowedCreator(item.id)}
+                        () => {dispatch(unfollowedCreator(item.id))}
                     } className={styles.userButton}>Unfollow</button>
                     : <button disabled={followingProgress.some(id => id === item.id)} onClick={
-                        () => {followedCreator(item.id)}
+                        () => {dispatch(followedCreator(item.id))}
                     } className={styles.userButton}>Follow</button>}
             </div>
             <div className={styles.userRight}>

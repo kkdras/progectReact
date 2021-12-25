@@ -1,15 +1,18 @@
 import style from "./login.module.css"
-import {connect, useSelector} from "react-redux";
-import {loginCreator, logoutCreator} from "../../redax/authReducer";
-import {Redirect, useHistory} from "react-router-dom";
+import {loginCreator, } from "../../redax/authReducer";
+import {useHistory} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import {FC} from "react";
+import {useTypesSelector} from "../../types/hooks";
+import {useDispatch} from "react-redux";
 
 
-let Login = (props) => {
+let Login = ({}) => {
+    let dispatch = useDispatch()
     let history = useHistory()
-    let isLog = useSelector(state => state.auth.isLog)
-    let onSubmit = (data) => {
-        props.loginCreator(data.login,data.password,data.rememberMe,data.captcha)
+    let isLog = useTypesSelector(state => state.auth.isLog)
+    let onSubmit = (data:DataType) => {
+        dispatch(loginCreator(data.login,data.password,data.rememberMe,data.captcha))
     }
     if (isLog){
         history.push("/profile")
@@ -20,10 +23,20 @@ let Login = (props) => {
         </div>
     )
 }
-let LoginForm = (props) => {
+type DataType = {
+    login: string
+    password: string
+    rememberMe: boolean
+    captcha: string
+}
+
+type LoginFormPropsType = {
+    onSubmit: (data: DataType) => void
+}
+
+let LoginForm:FC<LoginFormPropsType>= (props) => {
     const { register, handleSubmit, formState: {errors}} = useForm();
-    let captchaUrl = useSelector(state => state.auth.urlCaptcha)
-    //console.log(errors)
+    let captchaUrl = useTypesSelector(state => state.auth.urlCaptcha)
     return (
         <form onSubmit={handleSubmit(props.onSubmit)}>
             <div>
@@ -44,5 +57,6 @@ let LoginForm = (props) => {
         </form>
     )
 }
+export default Login
 
-export default connect(null,{loginCreator,logoutCreator})(Login)
+//export default connect(null,{loginCreator,logoutCreator})(Login)

@@ -1,86 +1,88 @@
 import s from "../../profile.module.css";
-import React from "react";
+import React, {FC} from "react";
 import {useForm} from "react-hook-form";
-import {useDispatch, useSelector} from "react-redux";
+import {getName} from "../../../utils/forms/getName";
+import {userProfileType} from "../../../../types/types";
+import {useTypesSelector} from "../../../../types/hooks";
+import {useDispatch} from "react-redux";
 
 
-export let AboutForm = (props) => {
-    const { register,setError, handleSubmit, formState: {errors}} = useForm();
-    let isDisabled = useSelector(state => state.profilePage.submitButtonDisabled)
-    console.log(errors)
-    let id =  useSelector(state => state.auth.userId)
-    let dispatch = useDispatch()
-    let getName = (string) => {
-        let tmp1 = string.split("(")[1]
-        tmp1 = tmp1.split(")")[0]
-        tmp1 = tmp1.split(">")
-        if(tmp1.length === 1) {
-            tmp1 = tmp1[0]
-        }else {
-            tmp1 = tmp1[1]
-        }
-        let firstLetter = tmp1[0].toLowerCase()
-        return firstLetter + tmp1.slice(1,tmp1.length)
+type AboutFormPropsType = {
+    putProfileObject: (object: object,id: number) => {
+        resultCode?: 1
+        messages: ['Something wrong'],
+        data?: {}
     }
-    let aboutSubmit = async (data) => {
-        let response = await dispatch(props.putProfileObject(data,id))
-        if(!response.messages) return
-        let obj = []
-        response.messages.forEach((item,index,arr) => {
-            obj.push({type:"manual",name:getName(item),message: item.split("(")[0]})
-        })
-        obj.forEach(({ name, type, message }) =>
-            setError(name, { type, message })
-        );
+}
+
+
+export let AboutForm:FC<AboutFormPropsType> = ({putProfileObject}) => {
+    const { register,setError, handleSubmit, formState: {errors}} = useForm();
+    let isDisabled = useTypesSelector(state => state.profilePage.submitButtonDisabled)
+    let id =  useTypesSelector(state => state.auth.userId)
+    let dispatch = useDispatch()
+    let userProfile = useTypesSelector(state => state.profilePage.userProfile)
+    let aboutSubmit = async (data: any) => {
+        if(id){
+            let response = await dispatch(putProfileObject(data,id))
+            if(!response.messages) return
+            let obj:Array<{type:string,name:string,message:string}> = []
+            response.messages.forEach((item) => {
+                obj.push({type:"manual",name:getName(item),message: item.split("(")[0]})
+            })
+            obj.forEach(({ name, type, message }) =>
+                setError(name, { type, message })
+            );
+        }
     }
     return(
         <form onSubmit={handleSubmit(aboutSubmit)}>
             <input type="checkbox" defaultChecked={true}
                    {...register("lookingForAJob")}/>Ищу ли я работу?
             <input type="text" placeholder={"Описание работы которую я ищу"}
-                   defaultValue={props.userProfile.lookingForAJobDescription}
+                   defaultValue={userProfile?.lookingForAJobDescription || undefined}
                    {...register("lookingForAJobDescription",{
                        required: true
                    })}/>
             {errors.lookingForAJobDescription && <p>{errors.lookingForAJobDescription.message}</p>}
             <input type="text" placeholder={"Мое полное имя или титул"}
-                   defaultValue={props.userProfile.fullName}
+                   defaultValue={userProfile?.fullName || undefined}
                    {...register("fullName")}/>
             {errors.fullName && <p>{errors.fullName.message}</p>}
-            <input type="text" placeholder={"обо мне"}
-                   defaultValue={props.userProfile.aboutMe}
-                   {...register("aboutMe")}/>
+            {/*<input type="text" placeholder={"обо мне"}
+                   defaultValue={props.aboutMe || undefined}
+                   {...register("aboutMe")}/>*/}
             {errors.aboutMe && <p>{errors.aboutMe.message}</p>}
             <input type="text" placeholder={"Мой профиль в facebook"}
-                   defaultValue={props.userProfile.contacts.facebook}
+                   defaultValue={userProfile?.contacts.facebook|| undefined}
                    {...register("contacts.facebook")}/>
             {errors.facebook && <p>{errors.facebook.message}</p>}
             <input type="text" placeholder={"Мой профиль в github"}
-                   defaultValue={props.userProfile.contacts.github}
+                   defaultValue={userProfile?.contacts.github|| undefined}
                    {...register("contacts.github")}/>
             {errors.github && <p>{errors.github.message}</p>}
             <input type="text" placeholder={"Мой профиль в instagram"}
-                   defaultValue={props.userProfile.contacts.instagram}
+                   defaultValue={userProfile?.contacts.instagram || undefined}
                    {...register("contacts.instagram")}/>
             {errors.instagram && <p>{errors.instagram.message}</p>}
             <input type="text" placeholder={"Мой профиль в mainLink"}
-                   defaultValue={props.userProfile.contacts.mainLink}
+                   defaultValue={userProfile?.contacts.mainLink || undefined}
                    {...register("contacts.mainLink")}/>
             {errors.mainLink && <p>{errors.mainLink.message}</p>}
             <input type="text" placeholder={"Мой профиль в twitter"}
-                   defaultValue={props.userProfile.contacts.twitter}
+                   defaultValue={userProfile?.contacts.twitter || undefined}
                    {...register("contacts.twitter")}/>
             {errors.twitter && <p>{errors.twitter.message}</p>}
             <input type="text" placeholder={"Мой профиль в vk"}
-                   defaultValue={props.userProfile.contacts.vk}
+                   defaultValue={userProfile?.contacts.vk || undefined}
                    {...register("contacts.vk")}/>
             {errors.vk && <p>{errors.vk.message}</p>}
             <input type="text" placeholder={"Мой профиль в website"}
-                   defaultValue={props.userProfile.contacts.website}
+                   defaultValue={userProfile?.contacts.website || undefined}
                    {...register("contacts.website")}/>
             {errors.website && <p>{errors.website.message}</p>}
             <input type="text" placeholder={"Мой профиль в youtube"}
-                   defaultValue={props.userProfile.contacts.youtube}
+                   defaultValue={userProfile?.contacts.youtube || undefined}
                    {...register("contacts.youtube")}/>
             {errors.youtube && <p>{errors.youtube.message}</p>}
             <button type={"submit"} disabled={isDisabled} className={s.add}>submit</button>
@@ -88,13 +90,14 @@ export let AboutForm = (props) => {
     )
 }
 
-export let AboutMe = ({lookingForAJob,lookingForAJobDescription,fullName,contacts,aboutMe}) => {
+
+export let AboutMe:FC<userProfileType> = ({lookingForAJob,lookingForAJobDescription,fullName,contacts}) => {
     return (
         <div>
-            <div>
+            {/*<div>
                 <span>Обо мне</span>
                 <span>{aboutMe}</span>
-            </div>
+            </div>*/}
             <div>
                 <span>looking for a job---</span>
                 <span>{lookingForAJob ? "Yes" : "No"}</span>
@@ -109,16 +112,20 @@ export let AboutMe = ({lookingForAJob,lookingForAJobDescription,fullName,contact
             </div>
             <div>
                 <span>Contacts---</span>
-                <span>{Object.entries(contacts).map(item => <ContactsItem title={item[0]} value={item[1]} key={item}/>)}</span>
+                <span>{Object.entries(contacts).map((item) => <ContactsItem title={item[0]} value={item[1]}/>)}</span>
             </div>
         </div>
     )
 }
-export let ContactsItem = ({title,value}) => {
+interface ContactsType {
+    title: string | null
+    value: string | null
+}
+let ContactsItem:FC<ContactsType> = ({title,value}) => {
     return (
         <div>
-            <span>{title}--</span>
-            <span>{value || "не скажу"}</span>
+            {title &&<span>{title}--</span>}
+            {value && <span>{value || "не скажу"}</span>}
         </div>
     )
 }
