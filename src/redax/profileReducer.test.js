@@ -1,4 +1,4 @@
-import {createActionAddPost, profileReducer} from "./profileReducer";
+import {ProfileActions, profileReducer} from "./profileReducer";
 
 let initialState = {
     posts: [
@@ -19,7 +19,7 @@ let initialState = {
 
 
 test('test profile reducer', () => {
-    let action = createActionAddPost("какой то текст")
+    let action = ProfileActions.createActionAddPost("какой то текст")
     let newState = profileReducer(initialState,action)
     expect(newState.posts.length).toBe(3)
 });

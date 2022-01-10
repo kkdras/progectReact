@@ -1,15 +1,16 @@
 import {axiosRequest} from "../dal/api";
 import {usersType} from "../types/types";
-import {RootState} from "./redax-store";
-import {ThunkAction} from "redux-thunk";
+import {ActionType, GeneralThunkType} from "./redax-store";
 
-type initialState = {
+export type initialState = {
     users: Array<usersType>
     currentPage: number
     totalPage:number
     count: number
     isLoading: boolean
     followingProgress: Array<number>
+    term: string,
+    friend: string
 }
 
 let initialState:initialState = {
@@ -19,28 +20,15 @@ let initialState:initialState = {
     count: 5,
     isLoading: false,
     followingProgress: [],//array юзеров которые ждут ответа от сервера на подписку
+    term: "",
+    friend: "",
 }
 
-enum ActionType {
-    FOLLOW = "FOLLOW",
-    UNFOLLOW = "UNFOLLOW",
-    SET_USERS = "SET_USERS",
-    SET_CURRENT_PAGE = "SET_CURRENT_PAGE",
-    TOTAL_PAGE = "TOTAL_PAGE",
-    LOADING = "LOADING",
-    FOLLOWINGINPROGRESS = "FOLLOWINGINPROGRESS"
-}
-type GeneralActionType = followed |
-    unFollowed |
-    setUsers |
-    setCurrentPage |
-    setTotalUsersCount |
-    toggleLoading |
-    followingProgressAC
+type GeneralActionType = ActionType<typeof usersActions>
 
 export const userReducer = (state = initialState, action: GeneralActionType):initialState => {
     switch (action.type) {
-        case ActionType.FOLLOW:
+        case "FOLLOW":
             return {
                 ...state,
                 users: state.users.map(item => {
@@ -50,7 +38,7 @@ export const userReducer = (state = initialState, action: GeneralActionType):ini
                     return item
                 })
             }
-        case ActionType.UNFOLLOW:
+        case "UNFOLLOW":
             return {
                 ...state,
                 users: state.users.map(item => {
@@ -60,15 +48,15 @@ export const userReducer = (state = initialState, action: GeneralActionType):ini
                     return item
                 })
             }
-        case ActionType.SET_USERS:
+        case "SET_USERS":
             return {...state, users: [ ...action.users]}
-        case ActionType.SET_CURRENT_PAGE:
+        case "SET_CURRENT_PAGE":
             return {...state,currentPage: action.currentPage}
-        case ActionType.TOTAL_PAGE:
+        case "TOTAL_PAGE":
             return {...state,totalPage: action.count}
-        case ActionType.LOADING:
+        case "LOADING":
             return {...state,isLoading: action.loading}
-        case ActionType.FOLLOWINGINPROGRESS:
+        case "FOLLOWINGINPROGRESS":
             return {
                 ...state,
                 followingProgress: action.isFetching
@@ -76,99 +64,80 @@ export const userReducer = (state = initialState, action: GeneralActionType):ini
                     : state.followingProgress.filter(id => id != action.userId)
 
             }
+        case "CHANGE_TERM":
+            return {...state, term: action.newTerm}
+        case "CHANGE_FRIEND":
+            return {...state, friend: action.isFriend}
         default:
             return state
     }
 
 }
 
-
-
-type followed = {
-    type: ActionType.FOLLOW
-    userId: number
+export let usersActions = {
+    followed: (userId: number) => ({type:"FOLLOW", userId}as const),
+    unFollowed: (userId:number) => ({type:"UNFOLLOW", userId}as const),
+    setUsers: (users: Array<usersType>) => ({type:"SET_USERS",users}as const),
+    setCurrentPage: (current: number) => ({type: "SET_CURRENT_PAGE", currentPage: current}as const),
+    setTotalUsersCount: (count:number) => ({type: "TOTAL_PAGE", count}as const),
+    toggleLoading: (loading: boolean) => ({type: "LOADING", loading}as const),
+    followingProgressAC: (isFetching: boolean,userId: number) => ({type: "FOLLOWINGINPROGRESS", isFetching, userId}as const),
+    changeTermAC: (newTerm: string) => ({type:"CHANGE_TERM",newTerm} as const),
+    changeFriendAC: (isFriend: string) => ({type:"CHANGE_FRIEND",isFriend} as const)
 }
-export let followed = (userId: number):followed => ({type:ActionType.FOLLOW, userId})
 
-type unFollowed = {
-    type: ActionType.UNFOLLOW
-    userId: number
-}
-export let unFollowed = (userId:number):unFollowed => ({type:ActionType.UNFOLLOW, userId})
-
-type setUsers = {
-    type: ActionType.SET_USERS
-    users: Array<any>
-}
-export let setUsers = (users: Array<usersType>):setUsers => ({type:ActionType.SET_USERS,users})
-
-type setCurrentPage = {
-    type: ActionType.SET_CURRENT_PAGE
-    currentPage: number
-}
-export let setCurrentPage = (current: number):setCurrentPage => ({type: ActionType.SET_CURRENT_PAGE, currentPage: current})
-
-type setTotalUsersCount = {
-    type: ActionType.TOTAL_PAGE
-    count: number
-}
-export let setTotalUsersCount = (count:number):setTotalUsersCount => ({type: ActionType.TOTAL_PAGE, count})
-
-type toggleLoading = {
-    type: ActionType.LOADING
-    loading: boolean
-}
-export let toggleLoading = (loading: boolean):toggleLoading => ({type: ActionType.LOADING, loading})
-
-type followingProgressAC = {
-    type: ActionType.FOLLOWINGINPROGRESS
-    isFetching: boolean
-    userId: number
-}
-export let followingProgressAC = (isFetching: boolean,userId: number):followingProgressAC => ({type: ActionType.FOLLOWINGINPROGRESS, isFetching, userId})
-
-
-export let getUsersCreator = (currentPage: number, count: number):
-    ThunkAction<Promise<void>, RootState, unknown, GeneralActionType> => {
+export let applyFilters = (term: string,friend: string, currentPage : number): GeneralThunkType<GeneralActionType> => {
     return async (dispatch) => {
-        dispatch(toggleLoading(true))
-        let data = await axiosRequest.user.getUsers(currentPage,count)
-        dispatch(toggleLoading(false));
-        dispatch(setUsers(data.items))
-        dispatch(setTotalUsersCount(data.totalCount))
+        dispatch(usersActions.setCurrentPage(currentPage))
+        dispatch(usersActions.changeTermAC(term))
+        dispatch(usersActions.changeFriendAC(friend))
+    }
+}
+
+export let getUsersCreator = ():
+    GeneralThunkType<GeneralActionType> => {
+    return async (dispatch,getState) => {
+        let {term, friend, currentPage, count} = getState().usersPage
+        dispatch(usersActions.toggleLoading(true))
+        let data = await axiosRequest.user.getUsers(currentPage,count,term,friend)
+        dispatch(usersActions.toggleLoading(false));
+        dispatch(usersActions.setUsers(data.items))
+        dispatch(usersActions.setTotalUsersCount(data.totalCount))
     }
 }
 export let pageChangedCreator = (pageNumber: number,count:number):
-    ThunkAction<Promise<void>, RootState, unknown, GeneralActionType> => {
-    return async (dispatch) => {
-        dispatch(toggleLoading(true))
-        dispatch(setCurrentPage(pageNumber))
-        let data = await axiosRequest.user.getUsers(pageNumber,count)
-        dispatch(toggleLoading(false))
-        dispatch(setUsers(data.items))
+    GeneralThunkType<GeneralActionType> => {
+    return async (dispatch,getState) => {
+        let {term,friend} = getState().usersPage
+        dispatch(usersActions.toggleLoading(true))
+        dispatch(usersActions.setCurrentPage(pageNumber))
+        let data = await axiosRequest.user.getUsers(pageNumber,count,term,friend)
+        dispatch(usersActions.toggleLoading(false))
+        dispatch(usersActions.setUsers(data.items))
     }
 }
+
 
 export let unfollowedCreator = (itemId: number):
-    ThunkAction<Promise<void>, RootState, unknown, GeneralActionType> => {
+    GeneralThunkType<GeneralActionType> => {
     return async (dispatch) => {
-        dispatch(followingProgressAC(true,itemId))
+        dispatch(usersActions.followingProgressAC(true,itemId))
         let data = await axiosRequest.user.deleteFollow(itemId)
         if (data.resultCode === 0) {
-            dispatch(unFollowed(itemId))
+            dispatch(usersActions.unFollowed(itemId))
         }
-        dispatch(followingProgressAC(false,itemId))
+        dispatch(usersActions.followingProgressAC(false,itemId))
     }
 }
 
-export let followedCreator = (itemId: number):
-    ThunkAction<Promise<void>, RootState, unknown, GeneralActionType> => {
+export let followedCreator = (userId: number):
+    GeneralThunkType<GeneralActionType> => {
     return async (dispatch) => {
-        dispatch(followingProgressAC(true,itemId))
-        let data = await axiosRequest.user.follow(itemId)
+        dispatch(usersActions.followingProgressAC(true,userId))
+        let data = await axiosRequest.user.follow(userId)
         if (data.resultCode === 0) {
-            dispatch(followed(itemId))
+            dispatch(usersActions.followed(userId))
         }
-        dispatch(followingProgressAC(false,itemId))
+        dispatch(usersActions.followingProgressAC(false,userId))
     }
 }

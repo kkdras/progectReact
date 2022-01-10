@@ -13,7 +13,7 @@ import {HeaderContainer} from "./components/header/headerContainer";
 import Login from "./components/login/login";
 import {initializeApplication} from "./redax/appReducer";
 import Loading from "./components/users/loading";
-import {DialogsContainer} from "./components/dilogs/dialogs"
+import {Dialogs} from "./components/dilogs/dialogs"
 import {Users} from "./components/users/users"
 //let DialogsContainer = React.lazy(() => import("./components/dilogs/dialogs"));
 //let UsersContainer = React.lazy(() => import("./components/users/users"));
@@ -41,7 +41,7 @@ export let App = ({}) => {
                             <Suspense fallback={<div>загрузка</div>}>
                                 <Switch>
                                     <Redirect exact from="/" to="/profile" />
-                                    <Route path={"/dialogs"} render={() => <DialogsContainer/>}/>
+                                    <Route path={"/dialogs"} render={() => <Dialogs/>}/>
                                     <Route path="/profile/:userId?" render={() => <ProfileContainer/>}/>
                                     <Route path={"/users"} render={() => <Users/>}/>
                                     <Route path={"/login"} render={() => <Login/>}/>

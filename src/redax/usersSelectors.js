@@ -11,7 +11,6 @@ export let getTotalPageSelectors = (state) => {
 }
 
 export let getCountSelectors = (state) => {
-    //получаю количество страниц на странице
     return state.usersPage.count
 }
 

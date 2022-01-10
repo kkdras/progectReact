@@ -1,8 +1,8 @@
 import {
-    createActionAddPost,
+    ProfileActions,
     setPhotoProfile,
     updateStatusProfile,
-    putProfileObject, toggleEditMode
+    putProfileObject
 } from "../../../redax/profileReducer";
 import Info from "./info";
 import {FC} from "react";
@@ -13,10 +13,10 @@ type PropsType = {
 
 export let InfoContainer:FC<PropsType> = ({isOwn}) => {
     return <Info isOwn={isOwn}
-                 createActionAddPost={createActionAddPost}
+                 createActionAddPost={ProfileActions.createActionAddPost}
                  setPhotoProfile={setPhotoProfile}
                  updateStatusProfile={updateStatusProfile}
                  putProfileObject={putProfileObject}
-                 toggleEditMode={toggleEditMode}
+                 toggleEditMode={ProfileActions.toggleEditMode}
     />
 }

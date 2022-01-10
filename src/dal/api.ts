@@ -9,32 +9,30 @@ let instance = axios.create({
         "API-KEY":apiKey
     },
 })
+
+export type ResponseType<D = {}, RC = ResultCode> = {
+    resultCode: RC
+    messages: Array<string>
+    data: D
+}
+
 export enum ResultCodeLoginCreator {
     NeedCaptcha = 10
 }
+
 export enum ResultCode {
     Success = 0,
     Error = 1,
 }
 
-type AuthLoginType = {
-    resultCode: ResultCode
-    messages: Array<string>
-    data: {
-        id:number
-        email: string
-        login: string
-    }
+type AuthLoginDataType = {
+    id:number
+    email: string
+    login: string
 }
-type AuthMeType = {
-    resultCode: ResultCodeLoginCreator | ResultCode
-    messages: Array<string>
-    data: {userId: number}
-}
-export type FollowUnFollowType = {
-    resultCode: ResultCode
-    messages: Array<string>
-    data: {}
+
+type AuthMeDataType = {
+    userId: number
 }
 
 type GetUserType = {
@@ -43,38 +41,35 @@ type GetUserType = {
     error: null | string
 }
 
-type SetPhotoType = {
-    resultCode: ResultCode
-    messages: Array<string>
-    data: {
-        photos: photosType
-    }
+type SetPhotoDataType = {
+    photos: photosType
 }
 
 export let axiosRequest = {
     header: {
         getLogUser(){
-            return instance.get<AuthLoginType>(`auth/me`).then(response => response.data)
+            return instance.get<ResponseType<AuthLoginDataType>>(`auth/me`).then(response => response.data)
         },
         login(email: string,password:string,rememberMe:boolean,captcha: null | string = null){
-            return instance.post<AuthMeType>(`auth/login`,{email,password,rememberMe,captcha})
+            return instance.post<ResponseType<AuthMeDataType,ResultCodeLoginCreator | ResultCode>>(`auth/login`,{email,password,rememberMe,captcha})
                 .then(response => response.data)
         },
         logout(){
-            return instance.delete<AuthMeType>(`auth/login`)
+            return instance.delete<ResponseType<AuthMeDataType,ResultCodeLoginCreator | ResultCode>>(`auth/login`)
                 .then(response => response.data)
         }
     },
     user:{
-        getUsers(currentPage: number,count: number){
-            return instance.get<GetUserType>(`users?page=${currentPage}&count=${count}`)
+        getUsers(currentPage: number,count: number,term: string, friend: string){
+            return instance.get<GetUserType>(`users?page=${currentPage}&count=${count}` + `&term=${term === "" ? "" : term}`
+             + `&friend=${friend ===  "true" || friend === "false" ? friend : ""}`)
                 .then(response => response.data)
         },
         deleteFollow(id: number){
-            return instance.delete<FollowUnFollowType>(`follow/${id}`).then(response => response.data)
+            return instance.delete<ResponseType>(`follow/${id}`).then(response => response.data)
         },
         follow(id:number){
-            return instance.post<FollowUnFollowType>(`follow/${id}`).then(response => response.data)
+            return instance.post<ResponseType>(`follow/${id}`).then(response => response.data)
         }
     },
     profile:{
@@ -87,22 +82,22 @@ export let axiosRequest = {
             return instance.get<string>(`profile/status/${userId}`)
         },
         setStatus(string: string){
-            return instance.put<FollowUnFollowType>(`profile/status`,{status: string})
+            return instance.put<ResponseType>(`profile/status`,{status: string})
         },
         setPhoto(photo: any){
             let formData = new FormData()
             formData.append("image",photo)
-            return instance.put<SetPhotoType>("/profile/photo",formData,{
+            return instance.put<ResponseType<SetPhotoDataType>>("/profile/photo",formData,{
                 headers:{'Content-Type': 'multipart/form-data'}
             })
         },
         setDescription(data: object){
-           return  instance.put<FollowUnFollowType>("profile",data)
+           return  instance.put<ResponseType>("profile",data)
         }
     },
     auth:{
         getCaptcha(){
-            return instance.get("/security/get-captcha-url")
+            return instance.get<{url:string}>("/security/get-captcha-url")
         }
     }
 }

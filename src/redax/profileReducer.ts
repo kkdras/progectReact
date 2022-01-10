@@ -1,7 +1,6 @@
 import {axiosRequest} from "../dal/api";
 import {insideObjectType, photosType, userProfileType} from "../types/types";
-import {ThunkAction} from "redux-thunk";
-import {RootState} from "./redax-store";
+import {ActionType, GeneralThunkType} from "./redax-store";
 
 
 type initialStateType = {
@@ -33,143 +32,101 @@ let initialState:initialStateType = {
     status: null
 }
 
-enum profileActions {
-    ADD_POST = "ADD_POST",
-    SET_USER_PROFILE = "SET_USER_PROFILE",
-    SET_STATUS = "SET_STATUS",
-    SET_PHOTO = "profile/SET_PHOTO",
-    TOGGLE_EDIT_MODE = "profile/TOGGLE_EDIT_MODE",
-    TOGGLE_DISABLED_BUTTON = "profile/TOGGLE_DISABLED_BUTTON"
-}
-type GeneralActionType = createActionAddPostType | setUserProfileType | setStatusProfile |
-    setUserPhotoType | toggleEditModeType | toddleSubmitButtonDisabledType
+type GeneralActionType = ActionType<typeof ProfileActions>
 
 export const profileReducer = (state = initialState, action: GeneralActionType):initialStateType => {
     switch (action.type) {
-        case profileActions.ADD_POST:
+        case "ADD_POST":
             return  {
                 ...state,
                 posts: [...state.posts,{id: 3, massage: action.text, like: 66, dislike: 10}],
             }
-        case profileActions.SET_USER_PROFILE:
+        case "SET_USER_PROFILE":
             return {
                 ...state,
                 userProfile: action.userProfile,
             }
-        case profileActions.SET_STATUS:
-            return {
-                ...state,
-                status: action.status
-            }
-        case profileActions.SET_PHOTO:
+        case "SET_STATUS":
+            return {...state, status: action.status}
+        case "profile/SET_PHOTO":
             return {
                 ...state,userProfile:{...state.userProfile, photos:action.photos} as userProfileType
             }
-        case profileActions.TOGGLE_EDIT_MODE:
+        case "profile/TOGGLE_EDIT_MODE":
             return {...state,editMode: !state.editMode}
-        case profileActions.TOGGLE_DISABLED_BUTTON:
+        case "profile/TOGGLE_DISABLED_BUTTON":
             return {...state, submitButtonDisabled: !state.submitButtonDisabled}
         default:
             return state
-
     }
-
 }
 
-
-export type createActionAddPostType = {
-    type: profileActions.ADD_POST
-    text: string
+export let ProfileActions = {
+    createActionAddPost: (text: string) =>
+        ({type: "ADD_POST", text} as const),
+    setUserProfile: (userProfile:userProfileType) =>
+        ({type: "SET_USER_PROFILE", userProfile} as const),
+    setStatusProfile: (status:string) =>
+        ({type: "SET_STATUS", status} as const),
+    setUserPhoto: (photos:photosType) =>
+        ({type:"profile/SET_PHOTO",photos} as const),
+    toggleEditMode: () =>
+        ({type:"profile/TOGGLE_EDIT_MODE"} as const),
+    toddleSubmitButtonDisabled: () =>
+        ({type:"profile/TOGGLE_DISABLED_BUTTON"} as const)
 }
-export let createActionAddPost: (text: string) => createActionAddPostType
-    = (text: string) => ({type: profileActions.ADD_POST, text})
-
-
-type setUserProfileType = {
-    type: profileActions.SET_USER_PROFILE
-    userProfile: userProfileType
-}
-export let setUserProfile = (userProfile:userProfileType):setUserProfileType =>
-    ({type: profileActions.SET_USER_PROFILE, userProfile})
-
-
-type setStatusProfile = {
-    type: profileActions.SET_STATUS
-    status: string
-}
-export let setStatusProfile = (status:string):setStatusProfile => ({type: profileActions.SET_STATUS, status})
-
-
-type setUserPhotoType = {
-    type: profileActions.SET_PHOTO
-    photos: photosType
-}
-export let setUserPhoto = (photos:photosType):setUserPhotoType => ({type:profileActions.SET_PHOTO,photos})
-
-
-export interface toggleEditModeType {
-    type: profileActions.TOGGLE_EDIT_MODE
-}
-export let toggleEditMode = ():toggleEditModeType => ({type:profileActions.TOGGLE_EDIT_MODE})
-
-
-interface toddleSubmitButtonDisabledType {
-    type: profileActions.TOGGLE_DISABLED_BUTTON
-}
-let toddleSubmitButtonDisabled = ():toddleSubmitButtonDisabledType => ({type:profileActions.TOGGLE_DISABLED_BUTTON})
-
 
 //thunk
 export let getUserProfile = (userId: number):
-    ThunkAction<Promise<void>, RootState, unknown, GeneralActionType> => {
+    GeneralThunkType<GeneralActionType> => {
     return async (dispatch) => {
         let response = await axiosRequest.profile.getUserProfile(userId)
-        dispatch(setUserProfile(response.data))
+        dispatch(ProfileActions.setUserProfile(response.data))
     }
 }
 
 export let getStatusProfile = (userId: number):
-    ThunkAction<Promise<void>, RootState, unknown, GeneralActionType>=> {
+    GeneralThunkType<GeneralActionType> => {
     return async (dispatch) => {
         let response = await axiosRequest.profile.getStatus(userId)
-        dispatch (setStatusProfile(response.data))
+        dispatch (ProfileActions.setStatusProfile(response.data))
     }
 }
 
 export let updateStatusProfile = (status: string):
-    ThunkAction<Promise<void>, RootState, unknown, GeneralActionType>=> {
+    GeneralThunkType<GeneralActionType> => {
     return async (dispatch ) => {
         let response = await axiosRequest.profile.setStatus(status)
         if (response.data.resultCode === 0){
-            dispatch (setStatusProfile(status))
+            dispatch (ProfileActions.setStatusProfile(status))
         }
     }
 }
 
 
 export let setPhotoProfile = (photo:any):
-    ThunkAction<Promise<void>, RootState, unknown, GeneralActionType>=> {
+    GeneralThunkType<GeneralActionType> => {
     return async (dispatch) => {
         let response = await axiosRequest.profile.setPhoto(photo)
         if(response.data.resultCode === 0){
-            dispatch(setUserPhoto(response.data.data.photos))
+            dispatch(ProfileActions.setUserPhoto(response.data.data.photos))
         }
     }
 }
-
+/*type dataPutProfileObject = {messages: null} | ResponseType*/
 
 export let putProfileObject = (object: object,id: number):
-    ThunkAction<void, RootState, unknown, GeneralActionType>=> {
+    GeneralThunkType<GeneralActionType, void> => {
     return async (dispatch) => {
-        dispatch(toddleSubmitButtonDisabled())
+        dispatch(ProfileActions.toddleSubmitButtonDisabled())
         let response = await axiosRequest.profile.setDescription(object)
         if(response.data.resultCode === 0){
             dispatch(getUserProfile(id))
-            dispatch(toggleEditMode())
-            dispatch(toddleSubmitButtonDisabled())
+            dispatch(ProfileActions.toggleEditMode())
+            dispatch(ProfileActions.toddleSubmitButtonDisabled())
             return {messages: null}
         }else{
-            dispatch(toddleSubmitButtonDisabled())
+            dispatch(ProfileActions.toddleSubmitButtonDisabled())
             return response.data
         }
     }

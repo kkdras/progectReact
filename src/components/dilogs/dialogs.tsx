@@ -1,34 +1,37 @@
 import s from "./dialogs.module.css"
-import Message from "./massage/massage";
-import Companion from "./companion/companion";
+import {Message} from "./massage/massage";
+import {Companion} from "./companion/companion";
 import profileStyle from "./../profile/profile.module.css";
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import {useForm} from "react-hook-form";
-import {sendMassageCreator, sendMessage} from "../../redax/dialogsReducer";
+import {startListeningMessage, stopListeningMessage} from "../../redax/dialogsReducer";
 import {useWithAuthRedirect} from "../../hoc/withAuthRedirect";
 import {useTypesSelector} from "../../types/hooks";
 import {useDispatch} from "react-redux";
+import {ChatApi} from "../../dal/chat-api";
 
 
-type DialogsType = {
-    sendMassageCreator: (payload:string) => sendMessage
-}
-
-let Dialogs:FC<DialogsType> = ({sendMassageCreator}) => {
+export let Dialogs:FC = () => {
     useWithAuthRedirect()
     let message = useTypesSelector(state => state.dialogsPage.message)
-    let user = useTypesSelector(state => state.dialogsPage.user)
+    let status = useTypesSelector(state => state.dialogsPage.status)
     let dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(startListeningMessage())
+        return () => {
+            dispatch(stopListeningMessage())
+        }
+    },[])
+    let submitForm:(data: {message:string}) => void = (data) => {
+        if(!data.message) return
+        ChatApi.sendMessage(data.message)
+    }
+
     return (
         <div className={s.dialogs}>
-            <div className={s.dialogsWrapper}>
-                {
-                    user.map(item => <Companion name={item.name} id={item.id} />)
-                }
-            </div>
             <div className={s.messageWrapper}>
                 <div className={profileStyle.addPost}>
-                    <DialogForm submitForm={(data) => dispatch(sendMassageCreator(data.message))}/>
+                    <DialogForm ready={!(status === "ready")} submitForm={submitForm}/>
                 </div>
                 {
                     message.map(item => <Message message={item.message}/>)
@@ -39,24 +42,21 @@ let Dialogs:FC<DialogsType> = ({sendMassageCreator}) => {
 }
 
 interface DialogForm {
-    submitForm: (data: any) => void
+    submitForm: (data: {message:string}) => void
+    ready: boolean
 }
 
-let DialogForm:FC<DialogForm> = ({submitForm}) => {
+let DialogForm:FC<DialogForm> = ({submitForm,ready}) => {
     let {handleSubmit,register,formState:{errors}} = useForm()
     return (
         <form onSubmit={handleSubmit(submitForm)}>
             <input placeholder={"Введи свое сообщение"} {...register("message", {maxLength: {
-                value: 20,
+                    value: 20,
                     message:"Пожалуйста поменьше букв"
                 }})} className={profileStyle.textarea}/>
             {errors.message && <p>{errors.message.message}</p>}
-            <button>submit</button>
+            <button disabled={ready}>send</button>
         </form>
     )
 }
 
-
-export let DialogsContainer = () => {
-    return <Dialogs sendMassageCreator={sendMassageCreator}/>
-}

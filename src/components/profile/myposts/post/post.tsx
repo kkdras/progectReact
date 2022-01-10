@@ -1,7 +1,16 @@
 import s from "./Post.module.css"
-function Post(props){
+import {FC} from "react";
+
+type propsType = {
+    like: number
+    dis: number | undefined
+    massage: string
+    id: number
+}
+
+let Post:FC<propsType> = (props) => {
     return (
-        <div className={s.post}>
+        <div  className={s.post}>
             <div className={s.post__post}>
                 {props.massage}
                 <br/>

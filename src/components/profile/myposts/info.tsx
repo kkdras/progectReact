@@ -5,18 +5,17 @@ import Status from "./post/status/status";
 import {AboutForm, AboutMe} from "./profileForm/profileForm";
 import {useTypesSelector} from "../../../types/hooks";
 import {
-    createActionAddPostType,
-    setPhotoProfile, toggleEditModeType,
+    ProfileActions,
+    setPhotoProfile,
     updateStatusProfile
 } from "../../../redax/profileReducer";
 import {useForm} from "react-hook-form";
 import {useDispatch} from "react-redux";
-
 type InfoPropsType = {
-    createActionAddPost: (text:string) => createActionAddPostType
+    createActionAddPost: (text:string) => ReturnType<typeof ProfileActions.createActionAddPost>
     setPhotoProfile: typeof setPhotoProfile
     updateStatusProfile: typeof updateStatusProfile
-    toggleEditMode: () => toggleEditModeType
+    toggleEditMode: () => ReturnType<typeof ProfileActions.toggleEditMode>
     putProfileObject: any
     isOwn: boolean
 }

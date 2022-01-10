@@ -16,7 +16,7 @@ code {
 }
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
 
-* {
+/* {
   padding: 0px;
   margin: 0px;
   border: 0px;
@@ -48,6 +48,7 @@ body {
   min-width: 320px;
 }
 
+!*
 input,
 button,
 textarea {
@@ -67,6 +68,7 @@ button::-moz-focus-inner {
   padding: 0;
   border: 0;
 }
+*!
 
 a,
 a:visited {
@@ -94,3 +96,4 @@ h6 {
   font-weight: inherit;
   font-size: inherit;
 }
+*/
