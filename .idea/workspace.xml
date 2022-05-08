@@ -1,6 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="13d1b5db-a498-47ae-8b5a-41a3ee52775c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/profile/aboutMe/aboutMe.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/profile/aboutMe/info.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/profile/aboutMe/profileTop.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/profile/status.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../weaterForcast/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/my-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/my-app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Page.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Page.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/aside/aside.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/aside/aside.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/aside/aside.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/aside/aside.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/dilogs/companion/companion.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dilogs/companion.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/dilogs/dialogs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dilogs/dialogs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/dilogs/massage/massage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dilogs/massage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/header/headerContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/header/headerContainer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/login/login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/login/login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/music/music.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/music/music.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile/myposts/info.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile/myposts/infoContainer.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile/myposts/post/Post.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile/myposts/post/post.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile/myposts/post/postContainer.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile/myposts/post/status/status.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile/myposts/profileForm/profileForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile/aboutMe/aboutMeForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile/profileContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile/profileContainer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/users/users.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/users/users.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/utils/forms/getName.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/utils/forms/getName.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/utils/pagination/paginator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/utils/pagination/paginator.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dal/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/dal/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dal/chat-api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/dal/chat-api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redax/appReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/redax/appReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redax/authReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/redax/authReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redax/dialogsReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/redax/dialogsReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redax/profileReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/redax/profileReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redax/redax-store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/redax-store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redax/store.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redax/user-reducer-thunk.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/redax/user-reducer-thunk.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redax/usersReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/redax/usersReducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/hooks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/hooks.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../weaterForcast/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../weaterForcast/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../weaterForcast/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../weaterForcast/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../weaterForcast/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../weaterForcast/src/index.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="28LgXrgwz48m3LRb4fsSyzZ8XnK" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../reduxEssentials" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="ts.external.directory.path" value="D:\programming\01-first-progect\node_modules\typescript\lib" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\programming\01-first-progect\src\components\profile" />
+      <recent name="D:\programming\01-first-progect\src\app" />
+      <recent name="D:\programming\01-first-progect\src\components\dilogs" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="13d1b5db-a498-47ae-8b5a-41a3ee52775c" name="Changes" comment="" />
+      <created>1651001327916</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651001327916</updated>
+      <workItem from="1651001327983" duration="35659000" />
+      <workItem from="1651156532603" duration="18583000" />
+      <workItem from="1652019199891" duration="18795000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

@@ -1,28 +1,49 @@
-import {requestCreator} from "./authReducer";
-import {ThunkAction} from "redux-thunk";
-import {RootState} from "./redax-store";
 
 
+import {getUserInfo} from "./authReducer";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+
+/*
 type InitialStateType = {
-    initialized: boolean
+   initialized: boolean
 }
 
-let initialState:InitialStateType = {
-    initialized:false,
+let initialState: InitialStateType = {
+   initialized: false
 }
 
+export let initializeApplication = createAsyncThunk(
+   "app/initialize",
+   async (_, {dispatch}) => {
+      await dispatch(getUserInfo())
+   }
+)
+
+let appSlice = createSlice({
+   name: "app",
+   initialState,
+   reducers: {},
+   extraReducers: (builder => {
+      builder.addCase(initializeApplication.fulfilled, ((state, action) => {
+         state.initialized = true
+      }))
+   })
+})
+export default appSlice.reducer
+
+*/
+
+/*
 enum ActionsType {
     INITIALIZED_FINISHED= "INITIALIZED_FINISHED"
 }
-
-type GeneralActionsType = InitializedSuccess
 
 export const appReducer = (state = initialState, action: GeneralActionsType):InitialStateType => {
     switch (action.type) {
         case ActionsType.INITIALIZED_FINISHED:
             return  {
                 ...state,
-                initialized: true,
+                initialized: true
             }
         default:
             return state
@@ -30,11 +51,14 @@ export const appReducer = (state = initialState, action: GeneralActionsType):Ini
     }
 }
 
+type GeneralActionsType = InitializedSuccess
 
 
 type InitializedSuccess = {
     type: ActionsType.INITIALIZED_FINISHED
 }
+
+
 export let initializeAC = ():InitializedSuccess => ({type:ActionsType.INITIALIZED_FINISHED})
 
 export let initializeApplication = (): ThunkAction<void, RootState, unknown, GeneralActionsType>=> {
@@ -43,3 +67,4 @@ export let initializeApplication = (): ThunkAction<void, RootState, unknown, Gen
             .then(() => dispatch(initializeAC()))
     }
 }
+*/

@@ -12,16 +12,16 @@
 	align-items: start;
 }
 
-.page__asidewrapper{
+.page__asideWrapper{
 	flex: 0 0 20%;
 	height: auto;
 
 }
 
-.page__dilwrapper{
+.page__wrapper{
 	background-color: #625b55;
 	margin: 0 0 0 10px;
-	min-height: 500px;
+	min-height: calc(100vh - 90px);
 	padding: 10px;
 	width: 100%;
 }

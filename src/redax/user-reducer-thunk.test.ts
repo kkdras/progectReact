@@ -1,3 +1,5 @@
+export let dfgdfg = 3
+/*
 import {followedCreator, unfollowedCreator, usersActions} from "./usersReducer";
 import {axiosRequest, ResponseType, ResultCode} from "../dal/api";
 
@@ -39,4 +41,4 @@ test("thunk-test-unfollow",async () => {
     expect(dispatch).toHaveBeenNthCalledWith(1,usersActions.followingProgressAC(true,1))
     expect(dispatch).toHaveBeenNthCalledWith(2,usersActions.unFollowed(1))
     expect(dispatch).toHaveBeenNthCalledWith(3,usersActions.followingProgressAC(false,1))
-})
+})*/

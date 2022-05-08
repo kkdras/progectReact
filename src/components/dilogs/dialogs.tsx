@@ -1,12 +1,11 @@
 import s from "./dialogs.module.css"
-import {Message} from "./massage/massage";
-import {Companion} from "./companion/companion";
+import {Message} from "./massage";
 import profileStyle from "./../profile/profile.module.css";
 import React, {FC, useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {startListeningMessage, stopListeningMessage} from "../../redax/dialogsReducer";
 import {useWithAuthRedirect} from "../../hoc/withAuthRedirect";
-import {useTypesSelector} from "../../types/hooks";
+import {useTypesSelector} from "../../app/hooks";
 import {useDispatch} from "react-redux";
 import {ChatApi} from "../../dal/chat-api";
 
@@ -51,8 +50,8 @@ let DialogForm:FC<DialogForm> = ({submitForm,ready}) => {
     return (
         <form onSubmit={handleSubmit(submitForm)}>
             <input placeholder={"Введи свое сообщение"} {...register("message", {maxLength: {
-                    value: 20,
-                    message:"Пожалуйста поменьше букв"
+                    value: 50,
+                    message: "Пожалуйста поменьше букв"
                 }})} className={profileStyle.textarea}/>
             {errors.message && <p>{errors.message.message}</p>}
             <button disabled={ready}>send</button>

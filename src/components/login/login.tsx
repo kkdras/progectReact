@@ -1,9 +1,9 @@
 import style from "./login.module.css"
-import {loginCreator, } from "../../redax/authReducer";
+import {logIn,} from "../../redax/authReducer";
 import {useHistory} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {FC} from "react";
-import {useTypesSelector} from "../../types/hooks";
+import {useTypesSelector} from "../../app/hooks";
 import {useDispatch} from "react-redux";
 
 
@@ -12,7 +12,12 @@ let Login = ({}) => {
     let history = useHistory()
     let isLog = useTypesSelector(state => state.auth.isLog)
     let onSubmit = (data:DataType) => {
-        dispatch(loginCreator(data.login,data.password,data.rememberMe,data.captcha))
+        dispatch(logIn({
+           email:data.login,
+           password:data.password,
+           rememberMe:data.rememberMe,
+           captcha:data.captcha
+        }))
     }
     if (isLog){
         history.push("/profile")
@@ -33,6 +38,7 @@ type DataType = {
 type LoginFormPropsType = {
     onSubmit: (data: DataType) => void
 }
+
 
 let LoginForm:FC<LoginFormPropsType>= (props) => {
     const { register, handleSubmit, formState: {errors}} = useForm();

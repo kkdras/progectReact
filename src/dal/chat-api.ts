@@ -1,4 +1,4 @@
-import {massageObject, statusType} from "../redax/dialogsReducer";
+import {messageObject, statusType} from "../redax/dialogsReducer";
 
 let ws: WebSocket | null = null
 
@@ -44,7 +44,7 @@ let createChannel = () => {
 }
 
 
-type MessageReceivedSubscriberType = (message: Array<massageObject>) => void
+type MessageReceivedSubscriberType = (message: Array<messageObject>) => void
 type ChangeStatusSubscriberType = (status: statusType) => void
 
 

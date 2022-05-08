@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import React from "react";
-import {logoutCreator} from "../../redax/authReducer";
-import {useTypesSelector} from "../../types/hooks";
+import {logout} from "../../redax/authReducer";
+import {useTypesSelector} from "../../app/hooks";
 import s from "./header.module.css";
 
 export let HeaderContainer = ({}) => {
@@ -15,7 +15,7 @@ export let HeaderContainer = ({}) => {
                 </a>
                 <a href={"#"} className={s.header__title}>
                     {isLog?
-                        <button onClick={() => dispatch(logoutCreator())}>logout</button>
+                        <button onClick={() => dispatch(logout())}>logout</button>
                         : "Go to log"}
                 </a>
             </div>

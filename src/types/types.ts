@@ -1,10 +1,3 @@
-export type insideObjectType = {
-    id: number
-    massage: string
-    like: number
-    dislike?: number
-}
-
 export type contacts = {
     github: string | null
     vk: string | null
@@ -21,14 +14,19 @@ export type photosType = {
     large: string | null
 }
 
-export type userProfileType = {
+export interface ISetUserProfile {
     userId: number
     lookingForAJob: boolean | null
     lookingForAJobDescription: string | null
     fullName: string | null
     contacts: contacts
+    aboutMe: string | null
+}
+interface IPartOfUserProfileWithPhoto{
     photos: photosType
 }
+
+export type userProfileType = ISetUserProfile & IPartOfUserProfileWithPhoto
 
 export type usersType = {
     name: string
@@ -36,4 +34,10 @@ export type usersType = {
     photos: photosType
     followed: boolean
     status: string
+}
+
+export interface IErrorType {
+    type: string
+    name:string
+    message: string
 }

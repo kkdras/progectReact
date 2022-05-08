@@ -1,6 +1,12 @@
 import styles from "./pagianor.module.css"
-import {FC, useMemo, useState} from "react";
+import React, {FC, useMemo, useState} from "react";
 import cn from "classnames";
+
+/*{<Paginator portionSize={10}
+            totalPage={totalUsersCount}
+            currentPage={currentPage}
+            count={userOfPage}
+            pageChanged={pageChanged}/>}*/
 
 type PropsType = {
     portionSize: number
@@ -9,21 +15,24 @@ type PropsType = {
     count:number
     pageChanged: (pageNumber: number) => void
 }
+//count - number of users per page
+//portionSize - number of pages displayed in pagination
 
 export let Paginator:FC<PropsType> = (props) => {
-    let pageCount = Math.ceil(props.totalPage / props.count);
-    let createArrForPagination = (pageCount: number) => {
-        console.log("требовательная функция")
+    let numberOfPages = Math.ceil(props.totalPage / props.count);
+    let createArrForPagination = (numberOfPages: number) => {
         let tmp = [];
-        for (let i = 1; i <= pageCount; i++) {
+        for (let i = 1; i <= numberOfPages; i++) {
             tmp.push(i)
         }
         return tmp
     }
 
-    let numArrPagination = useMemo(() => createArrForPagination(pageCount), [pageCount]);
+    let numArrPagination = useMemo(() => {
+        return createArrForPagination(numberOfPages)
+    }, [numberOfPages]);
 
-    let portionCount = Math.ceil(pageCount / props.portionSize);
+    let numberOfSlides = Math.ceil(numberOfPages / props.portionSize);
     let [portionNumber, setPortionNumber] = useState(1)
     let leftPortionPageNumber = (portionNumber - 1) * props.portionSize + 1
     let rightPortionPageNumber = portionNumber * props.portionSize
@@ -43,7 +52,7 @@ export let Paginator:FC<PropsType> = (props) => {
                                  props.pageChanged(p);
                              }}>{p}</span>
             })}
-        { portionCount > portionNumber &&
+        { numberOfSlides > portionNumber &&
         <button onClick={() => { setPortionNumber(portionNumber + 1) }}>NEXT</button> }
 
 
