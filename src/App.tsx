@@ -10,7 +10,7 @@ import {HeaderContainer} from "./components/header/headerContainer";
 import Login from "./components/login/login";
 import Loading from "./components/users/loading";
 import {Dialogs} from "./components/dilogs/dialogs"
-import {Users} from "./components/users/users"
+import {Users} from "./components/users/Users"
 import {useTypesSelector} from "./app/hooks";
 import {getUserInfo} from "./redax/authReducer";
 

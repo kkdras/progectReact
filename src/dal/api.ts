@@ -1,5 +1,6 @@
 import axios from "axios";
-import {ISetUserProfile, photosType, userProfileType, usersType} from "../types/types";
+import {ISetUserProfile, IUserOfList, photosType, userProfileType} from "../types/types";
+
 let apiKey = "2a53a8d7-9713-4730-bda2-40c41c92534f"
 let withCredentials: any = "true"
 let instance = axios.create({
@@ -36,7 +37,7 @@ type AuthMeDataType = {
 }
 
 type GetUserType = {
-   items: Array<usersType>
+   items: IUserOfList[]
    totalCount: number
    error: null | string
 }
@@ -46,7 +47,7 @@ type SetPhotoDataType = {
 }
 
 export let axiosRequest = {
-   header: {
+   auth: {
       getLogUser(){
          return instance.get<IRespType<AuthLoginDataType>>(`auth/me`).then(response => response.data)
       },
@@ -57,18 +58,21 @@ export let axiosRequest = {
       logout(){
          return instance.delete<IRespType<AuthMeDataType,ResultCodeLoginCreator | ResultCode>>(`auth/login`)
             .then(response => response.data)
+      },
+      getCaptcha(){
+         return instance.get<{url:string}>("/security/get-captcha-url")
       }
    },
-   user:{
+   users:{
       getUsers(currentPage: number,count: number,term: string, friend: string){
          return instance.get<GetUserType>(`users?page=${currentPage}&count=${count}` + `&term=${term === "" ? "" : term}`
             + `&friend=${friend ===  "true" || friend === "false" ? friend : ""}`)
             .then(response => response.data)
       },
-      deleteFollow(id: number){
+      unfollowUser(id: number){
          return instance.delete<IRespType>(`follow/${id}`).then(response => response.data)
       },
-      follow(id:number){
+      followUser(id:number){
          return instance.post<IRespType>(`follow/${id}`).then(response => response.data)
       }
    },
@@ -93,11 +97,6 @@ export let axiosRequest = {
       },
       setDescription(setProfileData: ISetUserProfile){
          return instance.put<IRespType>("profile",setProfileData).then(r => r.data)
-      }
-   },
-   auth:{
-      getCaptcha(){
-         return instance.get<{url:string}>("/security/get-captcha-url")
       }
    }
 }

@@ -1,46 +1,94 @@
-import styles from "./users.module.css";
 import {NavLink} from "react-router-dom";
-import {usersType} from "../../types/types";
+import {IUserOfList} from "../../types/types";
 import {FC} from "react";
 import {useDispatch} from "react-redux";
+import {Box, Button, Typography} from "@mui/material";
+import img from "./../../asserts/1024px-User-avatar.svg.png"
+import {followUser, unfollowUser} from "../../redax/usersReducer";
+import {useTypesSelector} from "../../app/hooks";
 
-type UserType = {
-    item: usersType
-    followingProgress: Array<number>
-    unfollowedCreator: (itemId: number) => void
-    followedCreator: (itemId: number) => void
+interface IUserProps{
+   user: IUserOfList
 }
 
-export let User:FC<UserType> = ({item,followingProgress,unfollowedCreator,followedCreator}) => {
-    let dispatch = useDispatch()
-    return (<div className={styles.users__container}>
-        <div className={styles.userWrapper}>
-            <div className={styles.userLeft}>
+export let User: FC<IUserProps> = ({ user}) => {
+   let dispatch = useDispatch()
+   let {name, status, followed, photos: {small, large}, id} = user
+   let {followingProgress: follInPr} = useTypesSelector(state => state.usersPage)
 
-                <NavLink to={'/profile/' + item.id}><img className={styles.userImage} src={item.photos.large || "https://persons.life/wp-content/uploads/2021/01/dmitry-nagiev-400x400.jpg"} alt=""/> </NavLink>
+   let isDisabledBtn: boolean = follInPr.some(id => id === user.id)
+   const contentBtn = followed ? "Unfollow" : "Follow"
+   let btnHandler = (id: number) => {
+      let tmp = followed ? unfollowUser : followUser
+      dispatch(tmp(id))
+   }
 
-                {item.followed ?
-                    <button disabled={followingProgress.some(id => id === item.id)} onClick={
-                        () => {dispatch(unfollowedCreator(item.id))}
-                    } className={styles.userButton}>Unfollow</button>
-                    : <button disabled={followingProgress.some(id => id === item.id)} onClick={
-                        () => {dispatch(followedCreator(item.id))}
-                    } className={styles.userButton}>Follow</button>}
-            </div>
-            <div className={styles.userRight}>
-                <div className={styles.userRL}>
-                    <div className={styles.userName}>{item.name}</div>
-                    <div className={styles.userDiscripton}>{item.status}</div>
-                </div>
-                <div className={styles.userRR}>
-                    <div className={styles.userСountry}>
-                        {"item.location.country"}
-                    </div>
-                    <div className="userCity">
-                        {"item.location.city"}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>)
+   return <Box
+      sx={{
+         display: "flex",
+         flexDirection: "column",
+         alignItems: "start",
+         bgcolor: "background.paper",
+         ":hover": {
+            boxShadow: 10,
+         },
+         ":hover .userConCont": {
+            visibility: "visible",
+            opacity: 1,
+         },
+         borderRadius: 3,
+         position: "relative"
+      }}
+   >
+      <NavLink style={{
+         position: "relative",
+         width: "100%",
+         height: "180px",
+      }} to={'/profile/' + user.id}>
+         <Box component={"img"} src={large || small || img} sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            top: 0,
+            left: 0,
+            borderRadius: 3,
+         }}/>
+      </NavLink>
+      <Box className={"userConCont"} sx={{
+         position: "absolute",
+         top: 0,
+         left: 0,
+         display: "flex",
+         flexDirection: "column",
+         padding: 1,
+         visibility: "hidden",
+         opacity: 0,
+         bgcolor: "rgba(0,0,0,0.7)",
+         width: "100%",
+         height: "100%",
+         boxSizing: "border-box",
+         borderRadius: 3,
+         transition: "opacity 0.3s ease 0s"
+      }}>
+         <Typography
+            sx={{color: "common.white", lineHeight: 2, flexGrow: status ? 0 : 1}}
+            variant={"body2"}
+         >{name}</Typography>
+
+         {status && <Typography
+            sx={{color: "common.white", lineHeight: 2, flexGrow: 1}}
+            variant={"body2"}>{status}
+         </Typography>}
+
+         <Button
+            onClick={() => btnHandler(id)}
+            sx={{opacity: 1, justifySelf: "end"}}
+            variant="contained"
+            size="small"
+            disabled={isDisabledBtn}>
+            {contentBtn}
+         </Button>
+      </Box>
+   </Box>
 }

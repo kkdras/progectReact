@@ -28,12 +28,12 @@ interface IPartOfUserProfileWithPhoto{
 
 export type userProfileType = ISetUserProfile & IPartOfUserProfileWithPhoto
 
-export type usersType = {
+export interface IUserOfList {
     name: string
     id: number
     photos: photosType
     followed: boolean
-    status: string
+    status: string | null
 }
 
 export interface IErrorType {
