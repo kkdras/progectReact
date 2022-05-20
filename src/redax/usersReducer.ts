@@ -98,13 +98,13 @@ export interface ISearchFilters {
    currentPage?: number
 }
 
-export let applyFilters = createAsyncThunk<Promise<void>, ISearchFilters,
+export let applyFilters = createAsyncThunk<void, ISearchFilters,
    {
       dispatch: AppDispatch
       state: RootState
    }>(
    "users/applyFilters",
-   async (a: ISearchFilters, {dispatch,getState}) => {
+    (a: ISearchFilters, {dispatch,getState}) => {
       let {term,friend,usersPerPage} = getState().usersPage
       if(term !== a.term) dispatch(setTerm(a.term))
       if(friend !== a.friend) dispatch(setFriend(a.friend))

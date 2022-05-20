@@ -5,7 +5,6 @@ import {UsersForm} from "./UsersForm";
 
 let UsersTopWOMemo: FC = () => {
 
-
    return <>
       <MyPagination/>
       <UsersForm/>

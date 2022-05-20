@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from "react";
 import {Button, NativeSelect, styled, TextField} from "@mui/material";
 import {useForm} from "react-hook-form";
-import {useAppDispatch} from "../../app/redax-store";
+import {RootState, useAppDispatch} from "../../app/redax-store";
 import {applyFilters, getUsers, ISearchFilters} from "../../redax/usersReducer";
 import {useTypesSelector} from "../../app/hooks";
 import queryString from "querystring";
@@ -31,13 +31,19 @@ let splitParams = (string: string, tmp: ISearchParams) => {
    })
 }
 
+let usersPerPageSelector = (state: RootState) => state.usersPage.usersPerPage
+let currentPageSelector = (state: RootState) => state.usersPage.currentPage
+let friendSelector = (state: RootState) => state.usersPage.friend
+let termSelector = (state: RootState) => state.usersPage.term
+
+
 export let UsersForm:FC = () => {
    let {handleSubmit, formState: {errors}, register} = useForm()
 
-   let usersPerPage = useTypesSelector(state => state.usersPage.usersPerPage)
-   let currentPage = useTypesSelector(state => state.usersPage.currentPage)
-   let friend = useTypesSelector(state => state.usersPage.friend)
-   let term = useTypesSelector(state => state.usersPage.term)
+   let usersPerPage = useTypesSelector(usersPerPageSelector)
+   let currentPage = useTypesSelector(currentPageSelector)
+   let friend = useTypesSelector(friendSelector)
+   let term = useTypesSelector(termSelector)
 
    let dispatch = useAppDispatch()
 
