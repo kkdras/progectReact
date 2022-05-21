@@ -1,12 +1,12 @@
 import {Pagination} from "@mui/material";
 import React, {FC, memo} from "react";
-import {setCurrentPage} from "../../redax/usersReducer";
+import {currentPageSelector, setCurrentPage, usersPerPageSelector} from "../../redax/usersReducer";
 import {useAppDispatch, useTypesSelector} from "../../app/hooks";
 
 let MyPaginationWOMemo:FC = () => {
    let totalUsersCount = useTypesSelector(state => state.usersPage.totalUsersCount)
-   let currentPage = useTypesSelector(state => state.usersPage.currentPage)
-   let usersPerPage = useTypesSelector(state => state.usersPage.usersPerPage)
+   let currentPage = useTypesSelector(currentPageSelector)
+   let usersPerPage = useTypesSelector(usersPerPageSelector)
 
    let dispatch = useAppDispatch()
    return <Pagination

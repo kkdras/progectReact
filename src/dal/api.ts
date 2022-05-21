@@ -1,5 +1,6 @@
 import axios from "axios";
 import {ISetUserProfile, IUserOfList, photosType, userProfileType} from "../types/types";
+import {isBoolean} from "util";
 
 let apiKey = "2a53a8d7-9713-4730-bda2-40c41c92534f"
 let withCredentials: any = "true"
@@ -45,6 +46,7 @@ type GetUserType = {
 type SetPhotoDataType = {
    photos: photosType
 }
+export type friendUnion = "true" | "false" | ""
 
 export let axiosRequest = {
    auth: {
@@ -64,10 +66,11 @@ export let axiosRequest = {
       }
    },
    users:{
-      getUsers(currentPage: number,count: number,term: string, friend: string){
-         return instance.get<GetUserType>(`users?page=${currentPage}&count=${count}` + `&term=${term === "" ? "" : term}`
-            + `&friend=${friend ===  "true" || friend === "false" ? friend : ""}`)
-            .then(response => response.data)
+      getUsers(currentPage: number,count: number,term: string, friend: friendUnion){
+         let template = `users?page=${currentPage}&count=${count}`
+         term && (template += `&term=${term}`)
+         friend && (template += `&friend=${friend}`)
+         return instance.get<GetUserType>(template) .then(response => response.data)
       },
       unfollowUser(id: number){
          return instance.delete<IRespType>(`follow/${id}`).then(response => response.data)

@@ -1,14 +1,15 @@
-import {User} from "./User";
 import {useTypesSelector} from "../../app/hooks";
-import React from "react";
+import React, {FC} from "react";
 import {useWithAuthRedirect} from "../../hoc/withAuthRedirect";
 import {Box} from '@mui/material';
 import {UsersTop} from "./UsersTop";
+import {User} from "./User";
 
 
-export let Users = () => {
-   let users = useTypesSelector(state => state.usersPage.users)
+export let Users: FC = () => {
+   let usersId = useTypesSelector(state => state.usersPage.usersID)
    useWithAuthRedirect()
+
    return (
       <>
          <UsersTop />
@@ -17,7 +18,7 @@ export let Users = () => {
             gridTemplate: "1fr/repeat(auto-fill, minmax(150px, 1fr))",
             gap: 2,
          }}>
-            {users.map(item => <User key={item.id} user={item}/>)}
+            {usersId.map(item => <User id={item} key={item}/>)}
          </Box>
       </>
    )

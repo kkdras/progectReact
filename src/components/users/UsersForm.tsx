@@ -1,13 +1,23 @@
-import React, {FC, useEffect} from "react";
-import {Button, NativeSelect, styled, TextField} from "@mui/material";
+import React, {FC, memo, useEffect} from "react";
+import {Box, Button, LinearProgress, NativeSelect, styled, TextField} from "@mui/material";
 import {useForm} from "react-hook-form";
-import {RootState, useAppDispatch} from "../../app/redax-store";
-import {applyFilters, getUsers, ISearchFilters} from "../../redax/usersReducer";
+import {useAppDispatch} from "../../app/redax-store";
+import {
+   applyFilters,
+   currentPageSelector,
+   friendSelector,
+   getUsers,
+   ISearchFilters,
+   termSelector,
+   usersPerPageSelector
+} from "../../redax/usersReducer";
 import {useTypesSelector} from "../../app/hooks";
 import queryString from "querystring";
 import {useHistory, useLocation} from "react-router-dom";
+import {friendUnion} from "../../dal/api";
 
 let UsersFormElement = styled("form")(({theme}) => ({
+   flex: "1 1 auto",
    display: "flex",
    [theme.breakpoints.up('md')]: {
       flexWrap: "noWrap",
@@ -31,19 +41,15 @@ let splitParams = (string: string, tmp: ISearchParams) => {
    })
 }
 
-let usersPerPageSelector = (state: RootState) => state.usersPage.usersPerPage
-let currentPageSelector = (state: RootState) => state.usersPage.currentPage
-let friendSelector = (state: RootState) => state.usersPage.friend
-let termSelector = (state: RootState) => state.usersPage.term
 
-
-export let UsersForm:FC = () => {
+let UsersFormWoMemo:FC = () => {
    let {handleSubmit, formState: {errors}, register} = useForm()
 
    let usersPerPage = useTypesSelector(usersPerPageSelector)
    let currentPage = useTypesSelector(currentPageSelector)
    let friend = useTypesSelector(friendSelector)
    let term = useTypesSelector(termSelector)
+   let isLoading = useTypesSelector(state => state.usersPage.isLoading)
 
    let dispatch = useAppDispatch()
 
@@ -78,7 +84,7 @@ export let UsersForm:FC = () => {
       if (paramsObject.friend &&
          paramsObject.friend !== friendURI) {
          flag = true
-         friendURI = paramsObject.friend
+         friendURI = paramsObject.friend as friendUnion
       }
       if (paramsObject.count &&
          Number(paramsObject.count) !== count &&
@@ -111,68 +117,74 @@ export let UsersForm:FC = () => {
          pathname: '/users',
          search: queryString.stringify(query)
       })
-
       dispatch(getUsers())
+
    }, [currentPage, usersPerPage, term, friend])
 
 
-   return <UsersFormElement onSubmit={handleSubmit(onSubmit)}>
-      <NativeSelect
-         sx={{
-            mr:1,
-            ml:1,
-            flex: "0 0 80px"
-         }}
-         {...register("friend")}
-         defaultValue={""}
-      >
-         <option value="">All</option>
-         <option value="true">Friend</option>
-         <option value="false">No friend</option>
-      </NativeSelect>
+   return <Box sx={{height: "50px",display: "flex", alignItems: "center"}}>
+      {isLoading ? <LinearProgress sx={{flex: "1 1 auto"}}/> :
+      <UsersFormElement onSubmit={handleSubmit(onSubmit)}>
+         <NativeSelect
+            sx={{
+               mr: 1,
+               ml: 1,
+               flex: "0 0 80px"
+            }}
+            {...register("friend")}
+            defaultValue={""}
+         >
+            <option value="">All</option>
+            <option value="true">Friend</option>
+            <option value="false">No friend</option>
+         </NativeSelect>
 
-      <NativeSelect
-         sx={{
-            mr:1,
-            flex: "0 0 50px",
-            width: "50px",
-         }}
-         {...register("usersPerPage")}
-         defaultValue={usersPerPage}
-      >
-         {[5,10,15,20,25].map(item => <option key={item} value={item}>{item}</option>)}
-      </NativeSelect>
+         <NativeSelect
+            sx={{
+               mr: 1,
+               flex: "0 0 50px",
+               width: "50px",
+            }}
+            {...register("usersPerPage")}
+            defaultValue={usersPerPage}
+         >
+            {[5, 10, 15, 20, 25].map(item => <option key={item} value={item}>{item}</option>)}
+         </NativeSelect>
 
-      <TextField
-         error={errors.term}
-         helperText={errors.term && errors.term.message}
-         sx={{
-            mr:1,
-            flex: "1 1 auto"
-         }}
-         fullWidth
-         label="search"
-         id="search"
-         size="small"
-         {...register("term", {
-               maxLength: {
-                  value: 15,
-                  message: "Слишком много букв"
+         <TextField
+            error={errors.term}
+            helperText={errors.term && errors.term.message}
+            sx={{
+               mr: 1,
+               flex: "1 1 auto"
+            }}
+            fullWidth
+            label="search"
+            id="search"
+            size="small"
+            {...register("term", {
+                  maxLength: {
+                     value: 15,
+                     message: "Слишком много букв"
+                  }
                }
-            }
-         )} />
+            )} />
 
-      <Button
-         sx={{
-            borderRadius: 1,
-            pr:5,
-            pl:5,
-            height: "100%"
-         }}
-         size="small"
-         variant="contained"
-         type={"submit"}>Submit
+         <Button
+            sx={{
+               borderRadius: 1,
+               pr: 5,
+               pl: 5,
+               height: "100%"
+            }}
+            size="small"
+            variant="contained"
+            type={"submit"}>Submit
 
-      </Button>
-   </UsersFormElement>
+         </Button>
+      </UsersFormElement>}
+   </Box>
+
 }
+
+export let UsersForm = memo(UsersFormWoMemo)

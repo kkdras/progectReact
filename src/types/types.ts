@@ -33,7 +33,8 @@ export interface IUserOfList {
     id: number
     photos: photosType
     followed: boolean
-    status: string | null
+    status: string | null,
+    pendingFollow: boolean
 }
 
 export interface IErrorType {

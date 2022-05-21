@@ -3,17 +3,15 @@ import {useDispatch} from "react-redux";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import './App.css';
 import Aside from "./components/aside/aside";
-import {Music} from "./components/music/music";
 import s from "./Page.module.css";
 import {ProfileContainer} from "./components/profile/profileContainer";
 import {HeaderContainer} from "./components/header/headerContainer";
 import Login from "./components/login/login";
 import Loading from "./components/users/loading";
 import {Dialogs} from "./components/dilogs/dialogs"
-import {Users} from "./components/users/Users"
 import {useTypesSelector} from "./app/hooks";
 import {getUserInfo} from "./redax/authReducer";
-
+import {Users} from "./components/users/Users";
 
 
 export let App = ({ }) => {
@@ -42,7 +40,6 @@ export let App = ({ }) => {
                            <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
                            <Route path={"/users"} render={() => <Users />} />
                            <Route path={"/login"} render={() => <Login />} />
-                           <Route path={"/music"} component={() => <Music />} />
                            <Route path={"/!*"} component={() => <div>404 not found</div>} />
                         </Switch>
                      </Suspense>

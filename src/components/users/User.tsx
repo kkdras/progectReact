@@ -6,17 +6,24 @@ import {Box, Button, Typography} from "@mui/material";
 import img from "./../../asserts/1024px-User-avatar.svg.png"
 import {followUser, unfollowUser} from "../../redax/usersReducer";
 import {useTypesSelector} from "../../app/hooks";
+import {RootState} from "../../app/redax-store";
 
 interface IUserProps{
-   user: IUserOfList
+   id: number
 }
 
-export let User: FC<IUserProps> = ({ user}) => {
-   let dispatch = useDispatch()
-   let {name, status, followed, photos: {small, large}, id} = user
-   let {followingProgress: follInPr} = useTypesSelector(state => state.usersPage)
 
-   let isDisabledBtn: boolean = follInPr.some(id => id === user.id)
+export let User: FC<IUserProps> = ({id}) => {
+   let dispatch = useDispatch()
+   let {
+      name,
+      status,
+      followed,
+      photos: {small, large},
+      pendingFollow:isDisabledBtn
+   } = useTypesSelector(state => state.usersPage.users[id])
+
+
    const contentBtn = followed ? "Unfollow" : "Follow"
    let btnHandler = (id: number) => {
       let tmp = followed ? unfollowUser : followUser
@@ -44,7 +51,7 @@ export let User: FC<IUserProps> = ({ user}) => {
          position: "relative",
          width: "100%",
          height: "180px",
-      }} to={'/profile/' + user.id}>
+      }} to={'/profile/' + id}>
          <Box component={"img"} src={large || small || img} sx={{
             position: "absolute",
             width: "100%",

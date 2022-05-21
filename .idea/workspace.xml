@@ -4,11 +4,18 @@
     <list default="true" id="13d1b5db-a498-47ae-8b5a-41a3ee52775c" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/../weaterForcast/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/src/components/users/UsersForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/users/UsersForm.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/users/UsersTop.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/users/UsersTop.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/users/user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/users/User.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/users/users.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/users/users.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redax/usersReducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/redax/usersReducer.ts" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/users/UsersForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/users/UsersForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/users/user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/users/User.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/users/users.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/users/Users.tsx" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/../weaterForcast/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../weaterForcast/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../weaterForcast/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../weaterForcast/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../weaterForcast/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../weaterForcast/src/index.tsx" afterDir="false" />
@@ -81,8 +88,12 @@
       <workItem from="1652775325131" duration="10877000" />
       <workItem from="1652793844697" duration="2794000" />
       <workItem from="1652800722215" duration="913000" />
+<<<<<<< Updated upstream
       <workItem from="1652809101060" duration="3303000" />
       <workItem from="1653069573891" duration="740000" />
+=======
+      <workItem from="1652803307697" duration="3184000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>

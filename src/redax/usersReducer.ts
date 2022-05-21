@@ -1,4 +1,4 @@
-import {axiosRequest} from "../dal/api";
+import {axiosRequest, friendUnion} from "../dal/api";
 import {IUserOfList} from "../types/types";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppDispatch, RootState} from "../app/redax-store";
@@ -6,23 +6,23 @@ import {Dispatch} from "react";
 
 
 interface IUsersInitialState {
-   users: IUserOfList[]
+   usersID: number[],
+   users: {[key: number]: IUserOfList}
    currentPage: number
    totalUsersCount: number
    usersPerPage: number
    isLoading: boolean
-   followingProgress: Array<number>
    term: string,
-   friend: string
+   friend: friendUnion
 }
 
 let initialState: IUsersInitialState = {
-   users: [],
+   usersID: [],
+   users: {},
    currentPage: 1,
    totalUsersCount: 0,
    usersPerPage: 5,
    isLoading: false,
-   followingProgress: [],//array юзеров которые ждут ответа от сервера на подписку
    term: "",
    friend: "",
 }
@@ -39,7 +39,7 @@ let usersSlice = createSlice({
       setTerm(state, action: PayloadAction<string>) {
          state.term = action.payload
       },
-      setFriend(state, action: PayloadAction<string>) {
+      setFriend(state, action: PayloadAction<"true" | "false" | "">) {
          state.friend = action.payload
       },
       setUsersOnPage(state, action: PayloadAction<number>) {
@@ -49,29 +49,23 @@ let usersSlice = createSlice({
          state.isLoading = !state.isLoading
       },
       setUsers(state, action: PayloadAction<IUserOfList[]>){
-         state.users = action.payload
+         action.payload.forEach(item => {
+            state.users[item.id] = item
+         })
+         state.usersID = action.payload.map(item => item.id)
+
       },
       setTotalUsersCount(state, action: PayloadAction<number>) {
          state.totalUsersCount = action.payload
       },
       followInProgress(state, action: PayloadAction<IFollowInPrAct>) {
-         state.followingProgress = action.payload.isFetching
-            ? [...state.followingProgress, action.payload.userId]
-            : state.followingProgress.filter(id => id != action.payload.userId)
+         state.users[action.payload.userId].pendingFollow = action.payload.isFetching
       },
       unfollow(state,action:PayloadAction<number>){
-         state.users.forEach(item => {
-            if(item.id === action.payload){
-               item.followed = false;
-            }
-         })
+         state.users[action.payload].followed = false
       },
       follow(state,action:PayloadAction<number>){
-         state.users.forEach(item => {
-            if(item.id === action.payload){
-               item.followed = true;
-            }
-         })
+         state.users[action.payload].followed = true
       }
    }
 })
@@ -93,7 +87,7 @@ export let {
 
 export interface ISearchFilters {
    term: string,
-   friend: string,
+   friend: friendUnion,
    usersPerPage: number
    currentPage?: number
 }
@@ -181,3 +175,7 @@ export let followUser = createAsyncThunk(
    }
 )
 
+export let usersPerPageSelector = (state: RootState) => state.usersPage.usersPerPage
+export let currentPageSelector = (state: RootState) => state.usersPage.currentPage
+export let friendSelector = (state: RootState) => state.usersPage.friend
+export let termSelector = (state: RootState) => state.usersPage.term
