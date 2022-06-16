@@ -1,14 +1,11 @@
-import {NavLink} from "react-router-dom";
-import {IUserOfList} from "../../types/types";
 import {FC} from "react";
 import {useDispatch} from "react-redux";
-import {Box, Button, Typography} from "@mui/material";
+import {Box, Button, Link, Typography} from "@mui/material";
 import img from "./../../asserts/1024px-User-avatar.svg.png"
 import {followUser, unfollowUser} from "../../redax/usersReducer";
 import {useTypesSelector} from "../../app/hooks";
-import {RootState} from "../../app/redax-store";
 
-interface IUserProps{
+interface IUserProps {
    id: number
 }
 
@@ -20,7 +17,7 @@ export let User: FC<IUserProps> = ({id}) => {
       status,
       followed,
       photos: {small, large},
-      pendingFollow:isDisabledBtn
+      pendingFollow: isDisabledBtn
    } = useTypesSelector(state => state.usersPage.users[id])
 
 
@@ -39,19 +36,27 @@ export let User: FC<IUserProps> = ({id}) => {
          ":hover": {
             boxShadow: 10,
          },
-         ":hover .userConCont": {
-            visibility: "visible",
-            opacity: 1,
+         "@media (any-hover: hover)": {
+            ":hover .userConCont": {
+               visibility: "visible",
+               opacity: 1,
+            },
+         },
+         "@media (any-hover: none)": {
+            ".userConCont": {
+               visibility: "visible",
+               opacity: 1,
+            },
          },
          borderRadius: 3,
          position: "relative"
       }}
    >
-      <NavLink style={{
+      <Box sx={{
          position: "relative",
          width: "100%",
          height: "180px",
-      }} to={'/profile/' + id}>
+      }}>
          <Box component={"img"} src={large || small || img} sx={{
             position: "absolute",
             width: "100%",
@@ -61,7 +66,7 @@ export let User: FC<IUserProps> = ({id}) => {
             left: 0,
             borderRadius: 3,
          }}/>
-      </NavLink>
+      </Box>
       <Box className={"userConCont"} sx={{
          position: "absolute",
          top: 0,
@@ -78,19 +83,33 @@ export let User: FC<IUserProps> = ({id}) => {
          borderRadius: 3,
          transition: "opacity 0.3s ease 0s"
       }}>
-         <Typography
-            sx={{color: "common.white", lineHeight: 2, flexGrow: status ? 0 : 1}}
-            variant={"body2"}
-         >{name}</Typography>
-
+         <Link sx={{flexGrow: status ? 0 : 1}} href={'/profile/' + id}>
+            <Typography
+               sx={{
+                  color: "common.white",
+                  marginBottom: 1,
+                  lineHeight: 1.1
+               }}
+               variant={"body2"}
+            >{name}</Typography>
+         </Link>
          {status && <Typography
-            sx={{color: "common.white", lineHeight: 2, flexGrow: 1}}
+            sx={{
+               color: "common.white",
+               flexGrow: 1,
+               overflow: "hidden",
+               lineHeight: 1.1
+            }}
             variant={"body2"}>{status}
          </Typography>}
 
          <Button
             onClick={() => btnHandler(id)}
-            sx={{opacity: 1, justifySelf: "end"}}
+            sx={{
+               opacity: 1,
+               justifySelf: "end",
+               pt: 1
+            }}
             variant="contained"
             size="small"
             disabled={isDisabledBtn}>

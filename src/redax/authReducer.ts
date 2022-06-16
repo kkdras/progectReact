@@ -1,5 +1,6 @@
 import {axiosRequest, ResultCode, ResultCodeLoginCreator} from "../dal/api"
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {IUserPhoto, userProfileType} from "../types/types";
 
 interface IURLCaptcha{
    urlCaptcha: null | string
@@ -10,6 +11,7 @@ interface IInitialState{
    email: string | null
    login: string | null
    isLog: boolean | null
+   photos: IUserPhoto["photos"] | null
 }
 
 let initialState: IInitialState & IURLCaptcha = {
@@ -17,7 +19,8 @@ let initialState: IInitialState & IURLCaptcha = {
    email: null,
    login: null,
    isLog: null,
-   urlCaptcha: null
+   urlCaptcha: null,
+   photos: null
 }
 
 
@@ -25,11 +28,14 @@ let authSlice = createSlice({
       name: "auth",
       initialState,
       reducers: {
-         setUserInfo(state, action: PayloadAction<IInitialState>) {
+         setUserInfo(state, action: PayloadAction<Omit<IInitialState, "photos">>) {
             return {
                ...state,
                ...action.payload
             }
+         },
+         setUserPhotos(state, action: PayloadAction<IInitialState['photos']>){
+            state.photos = action.payload
          },
          setCaptcha(state, action: PayloadAction<string>) {
             state.urlCaptcha = action.payload
@@ -41,7 +47,7 @@ let authSlice = createSlice({
    }
 )
 export default authSlice.reducer
-export let {setUserInfo, setCaptcha} = authSlice.actions
+export let {setUserInfo, setCaptcha, setUserPhotos} = authSlice.actions
 
 
 //requestCreator
@@ -51,6 +57,15 @@ export let getUserInfo = createAsyncThunk(
       let response = await axiosRequest.auth.getLogUser()
       if (response.resultCode === ResultCode.Success) {
          let {id, email, login} = response.data;
+         let myPhoto: null | IInitialState["photos"]  = null
+         try{
+            let tmp = await axiosRequest.profile.getUserProfile(id).then(r => r.data)
+            myPhoto = tmp.photos
+         }catch (e){
+         }finally {
+            dispatch(setUserPhotos(myPhoto))
+         }
+
          dispatch(setUserInfo({userId: id, login, email, isLog: true}))
       }else{
          dispatch(setUserInfo({userId: null, email: null, login: null, isLog: false}))

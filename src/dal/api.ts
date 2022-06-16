@@ -1,6 +1,5 @@
 import axios from "axios";
-import {ISetUserProfile, IUserOfList, photosType, userProfileType} from "../types/types";
-import {isBoolean} from "util";
+import {ISetUserProfile, IUserOfList, IUserPhoto, userProfileType} from "../types/types";
 
 let apiKey = "2a53a8d7-9713-4730-bda2-40c41c92534f"
 let withCredentials: any = "true"
@@ -44,7 +43,7 @@ type GetUserType = {
 }
 
 type SetPhotoDataType = {
-   photos: photosType
+   photos: IUserPhoto["photos"]
 }
 export type friendUnion = "true" | "false" | ""
 

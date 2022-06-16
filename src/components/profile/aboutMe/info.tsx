@@ -1,64 +1,82 @@
 import s from "../profile.module.css";
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import Loading from "../../users/loading";
 import {AboutForm} from "./aboutMeForm";
-import {useTypesSelector} from "../../../app/hooks";
-
-import {useForm} from "react-hook-form";
-import {ProfileTop} from "./profileTop";
+import {useAppDispatch, useTypesSelector} from "../../../app/hooks";
 import {AboutMe} from "./aboutMe";
+import {ProfileTop} from "./profileTop";
+import img from "./../../../asserts/1024px-User-avatar.svg.png"
+import {toggleEditMode} from "../../../redax/profileReducer";
+import styled from "@emotion/styled";
+import {Box} from "@mui/material";
 
-
-type InfoPropsType = {
-    isOwn: boolean
-}
-type addPostPropsType = {
-    post: string
-}
-
-
-export let Info:FC<InfoPropsType> = (props) => {
-    let edit = useTypesSelector(state => state.profilePage.editMode)
-    let userProfile = useTypesSelector(state => state.profilePage.userProfile)
-    let imageDefault = "https://persons.life/wp-content/uploads/2021/01/dmitry-nagiev-400x400.jpg"
-
-
-
-    if (!userProfile){
-        return (<Loading loading={true} />)
-    }else {
-        return (
-            <div className={s.infoWrapper}>
-                <ProfileTop
-                   src={userProfile.photos.large || imageDefault}
-                   isOwn={props.isOwn}
-                />
-                <div className={s.addPost}>
-                    {/*<InfoForm addPost={(data:any) => addPost(data)}/>*/}
-                    {edit ||<AboutMe isOwn={props.isOwn} {...userProfile}/>}
-                    {props.isOwn && edit && <AboutForm />}
-                </div>
-            </div>
-        )
-    }
+interface IInfo {
+   isOwn: boolean
 }
 
-type InfoFormType = {
-    addPost: (data: addPostPropsType) => void
+
+export let Info: FC<IInfo> = (props) => {
+   let edit = useTypesSelector(state => state.profilePage.editMode)
+   let userProfile = useTypesSelector(state => state.profilePage.userProfile)
+   let dispatch = useAppDispatch()
+
+   useEffect(() => {
+
+      return () => {
+         dispatch(toggleEditMode(false))
+      }
+   }, [])
+
+
+   if (!userProfile) {
+      return (<Loading loading={true}/>)
+   } else {
+      return (
+         <div className={s.infoWrapper}>
+            <ProfileTop
+               src={userProfile.photos.large || userProfile.photos.small || img}
+               isOwn={props.isOwn}
+            />
+            <Box sx={{
+               bgcolor: "#bab0b0",
+               width: "100%",
+               boxShadow: 1,
+               mt: 1,
+            }} className={s.addPost}>
+               <Box sx={{
+                  padding: (theme) => theme.spacing(1),
+                  pt: 2,
+                  textAlign: "end",
+               }}>
+                  {edit || <AboutMe isOwn={props.isOwn} {...userProfile} />}
+                  {props.isOwn && edit && <AboutForm/>}
+               </Box>
+            </Box>
+         </div>
+      )
+   }
 }
 
-let InfoForm:FC<InfoFormType> = ({addPost}) => {
-    let {handleSubmit,register,formState:{errors}} = useForm()
-    return(
-        <form onSubmit={handleSubmit(addPost)}>
-            <input {...register("post", {maxLength: {
-                    value: 20,
-                    message:"Пожалуйста поменьше букв"
-                }})} placeholder={"Введите свое сообщение"} className={s.texarea} />
-            {errors.message && <p>{errors.message.post}</p>}
-            <button className={s.add}>submit</button>
-        </form>
-    )
+/*type InfoFormType = {
+   addPost: (data: addPostPropsType) => void
+}*/
+
+/*
+let InfoForm: FC<InfoFormType> = ({ addPost }) => {
+   let { handleSubmit, register, formState: { errors } } = useForm<addPostPropsType>()
+   return (
+      <form onSubmit={handleSubmit(addPost)}>
+         <input {...register("post", {
+            maxLength: {
+               value: 20,
+               message: "Пожалуйста поменьше букв"
+            }
+         })} placeholder={"Введите свое сообщение"} className={s.texarea} />
+         {errors.post && <p>{errors.post.message}</p>}
+         <button className={s.add}>submit</button>
+      </form>
+   )
 }
+*/
 
 

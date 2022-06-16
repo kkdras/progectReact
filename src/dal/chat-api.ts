@@ -1,4 +1,12 @@
-import {messageObject, statusType} from "../redax/dialogsReducer";
+export type statusType = "pending" | "ready" | "error"
+
+export interface IMessage {
+    message: string
+    photo: string
+    userId: number
+    userName: string
+    id: string
+}
 
 let ws: WebSocket | null = null
 
@@ -10,69 +18,76 @@ let cleanUp = () => {
 }
 
 let openHandler = () => {
+    console.log("open")
     notifyStatusSubscribers("ready")
 }
 let messageHandler = (event: MessageEvent) => {
+    console.log("MESSAGE")
     let newMessage = JSON.parse(event.data)
     subscribers["message-received"].forEach(item => item(newMessage))
 };
 let errorHandler = () => {
+    console.log("error")
     notifyStatusSubscribers("error")
-    console.log("refresh page")
 }
 let closeHandler = () => {
-    console.log("соединение с WebSocked разорвано")
+    console.log("close")
     notifyStatusSubscribers("pending")
     setTimeout(createChannel,3000)
 }
-//setTimeout(() => ws?.close(),2000)
 
 let notifyStatusSubscribers = (status: statusType) => {
     subscribers["status-changed"].forEach(item => item(status))
 }
 
-let createChannel = () => {
-    cleanUp()
-    ws?.close()
-    ws = new WebSocket("wss://social-network.samuraijs.com/handlers/ChatHandler.ashx")
-    notifyStatusSubscribers("pending")
-    ws.addEventListener('open', openHandler)
-    ws.addEventListener('close',closeHandler)
-    ws.addEventListener("message", messageHandler)
-    ws.addEventListener("error", errorHandler)
+let createChannel = async () => {
+    await cleanUp()
+    await ws?.close()
+    ws = await new WebSocket("wss://social-network.samuraijs.com/handlers/ChatHandler.ashx")
+    await notifyStatusSubscribers("pending")
+    await ws.addEventListener("open", openHandler)
+    await ws.addEventListener("close",closeHandler)
+    await ws.addEventListener("message", messageHandler)
+    await ws.addEventListener("error", errorHandler)
 
 }
 
 
-type MessageReceivedSubscriberType = (message: Array<messageObject>) => void
-type ChangeStatusSubscriberType = (status: statusType) => void
+export type MessageObs = (message: IMessage[]) => void
+export type StatusObs = (status: statusType) => void
 
 
 export type eventType = "message-received" | "status-changed"
 
-type subscribersType = {
-    "message-received": Array<MessageReceivedSubscriberType>
-    "status-changed": Array<ChangeStatusSubscriberType>
+// interface SDep {
+//     "message-received": MessageObs
+//     "status-changed": StatusObs
+// }
+
+interface ISubscribers{
+    "message-received": MessageObs[]
+    "status-changed": StatusObs[]
 }
-let subscribers: subscribersType = {
+
+const subscribers: ISubscribers = {
     "status-changed": [],
     "message-received": [],
 }
 
-
 export let ChatApi = {
     start(){
+        console.log('start')
         createChannel()
     },
-    subscribe(event: eventType,observer:MessageReceivedSubscriberType | ChangeStatusSubscriberType) {
+    subscribe<T extends eventType>(event: T, observer: T extends "message-received" ? MessageObs : StatusObs) {
         //@ts-ignore
         subscribers[event].push(observer)
         return () => {
             //@ts-ignore
-            subscribers[event].filter(item => item !== observer)
+            subscribers[event] = subscribers[event].filter(item => item !== observer)
         }
     },
-    unsubscribe(event: eventType,observer:MessageReceivedSubscriberType | ChangeStatusSubscriberType){
+    unsubscribe(event: eventType,observer:MessageObs | StatusObs){
         //@ts-ignore
         subscribers[event] = subscribers[event].filter(item => item !== observer)
     },

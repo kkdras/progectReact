@@ -12,18 +12,21 @@ import {
    usersPerPageSelector
 } from "../../redax/usersReducer";
 import {useTypesSelector} from "../../app/hooks";
-import queryString from "querystring";
-import {useHistory, useLocation} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 import {friendUnion} from "../../dal/api";
 
-let UsersFormElement = styled("form")(({theme}) => ({
+let UsersFormElement = styled("form")(({ theme }) => ({
    flex: "1 1 auto",
    display: "flex",
-   [theme.breakpoints.up('md')]: {
+   flexWrap: "wrap",
+   alignItems: "center",
+   [theme.breakpoints.up('sm')]: {
       flexWrap: "noWrap",
-      alignItems:"center",
-      marginBottom: theme.spacing(1)
    },
+   [theme.breakpoints.down('sm')]: {
+      height: "120px"
+   }
+
 }))
 
 interface ISearchParams extends Partial<Record<string, string>> {
@@ -34,16 +37,15 @@ interface ISearchParams extends Partial<Record<string, string>> {
 }
 
 
-let splitParams = (string: string, tmp: ISearchParams) => {
-   string.slice(1, string.length).split("&").forEach(item => {
-      let arr = item.split("=")
-      tmp[arr[0]] = arr[1]
+let splitParams = (searchParams: URLSearchParams, tmp: ISearchParams) => {
+   searchParams.forEach((value, key) => {
+      tmp[key] = value
    })
 }
 
 
-let UsersFormWoMemo:FC = () => {
-   let {handleSubmit, formState: {errors}, register} = useForm()
+let UsersFormWoMemo: FC = () => {
+   let { handleSubmit, formState: { errors }, register } = useForm<ISearchFilters>()
 
    let usersPerPage = useTypesSelector(usersPerPageSelector)
    let currentPage = useTypesSelector(currentPageSelector)
@@ -53,16 +55,16 @@ let UsersFormWoMemo:FC = () => {
 
    let dispatch = useAppDispatch()
 
-   let {search} = useLocation()
-   let history = useHistory()
+   let [searchParams, setSearchParams] = useSearchParams()
 
-   let onSubmit = (data: ISearchFilters) => dispatch(applyFilters(data))
+   let onSubmit = (data: ISearchFilters) => {
+      dispatch(applyFilters(data))
+   }
 
-   useEffect(() => {
+   useEffect( () => {
       // if search params string !== "" apply search params
       let paramsObject: ISearchParams = {}
-      splitParams(search, paramsObject)
-
+      splitParams(searchParams, paramsObject)
       let actualPage = currentPage
       let friendURI = friend
       let termURI = term
@@ -101,88 +103,99 @@ let UsersFormWoMemo:FC = () => {
                usersPerPage: count
             })
          )
+
       }
 
    }, [])
 
    useEffect(() => {
-      let query: ISearchParams = {}
+      let tmp = new URLSearchParams()
 
-      if (term) query.term = term
-      if (friend) query.friend = friend
-      if (currentPage) query.currentPage = String(currentPage)
-      if (usersPerPage) query.count = String(usersPerPage)
-
-      history.push({
-         pathname: '/users',
-         search: queryString.stringify(query)
-      })
+      if (term) tmp.append("term", term)
+      if (friend) tmp.append("friend", friend)
+      if (currentPage) tmp.append("currentPage", String(currentPage))
+      if (usersPerPage) tmp.append("usersPerPage", String(usersPerPage))
+      setSearchParams(tmp, { replace: true })
       dispatch(getUsers())
 
    }, [currentPage, usersPerPage, term, friend])
 
 
-   return <Box sx={{height: "50px",display: "flex", alignItems: "center"}}>
-      {isLoading ? <LinearProgress sx={{flex: "1 1 auto"}}/> :
-      <UsersFormElement onSubmit={handleSubmit(onSubmit)}>
-         <NativeSelect
-            sx={{
-               mr: 1,
-               ml: 1,
-               flex: "0 0 80px"
-            }}
-            {...register("friend")}
-            defaultValue={""}
-         >
-            <option value="">All</option>
-            <option value="true">Friend</option>
-            <option value="false">No friend</option>
-         </NativeSelect>
+   debugger
+   return <Box
+      sx={{
+         display: "flex",
+         mt: 1,
+         mb: 1,
+      }}>
+      {isLoading ? <LinearProgress sx={{ flex: "1 1 auto" }} /> :
+         <UsersFormElement onSubmit={handleSubmit(onSubmit)}>
+            <NativeSelect defaultValue={friend}
+               sx={{
+                  mr: 1,
+                  ml: 1,
+                  flex: {
+                     sm: "0 0 80px",
+                     xs: "1 1 auto"
+                  }
+               }}
+               {...register("friend")}
 
-         <NativeSelect
-            sx={{
-               mr: 1,
-               flex: "0 0 50px",
-               width: "50px",
-            }}
-            {...register("usersPerPage")}
-            defaultValue={usersPerPage}
-         >
-            {[5, 10, 15, 20, 25].map(item => <option key={item} value={item}>{item}</option>)}
-         </NativeSelect>
+            >
+               <option value="">All</option>
+               <option value="true">Friend</option>
+               <option value="false">No friend</option>
+            </NativeSelect>
 
-         <TextField
-            error={errors.term}
-            helperText={errors.term && errors.term.message}
-            sx={{
-               mr: 1,
-               flex: "1 1 auto"
-            }}
-            fullWidth
-            label="search"
-            id="search"
-            size="small"
-            {...register("term", {
+            <NativeSelect
+               sx={{
+                  mr: 1,
+                  flex: {
+                     sm: "0 0 50px",
+                     xs: "1 1 auto"
+                  },
+                  width: "50px",
+               }}
+               {...register("usersPerPage")}
+               defaultValue={usersPerPage}
+            >
+               {[5, 10, 15, 20, 25].map(item => <option key={item} value={item}>{item}</option>)}
+            </NativeSelect>
+
+            <TextField
+               error={!!errors.term}
+               helperText={errors.term && errors.term.message}
+               sx={{
+                  mr: 1,
+                  flex: "1 1 auto"
+               }}
+               fullWidth
+               label="search"
+               id="search"
+               size="small"
+               {...register("term", {
                   maxLength: {
                      value: 15,
                      message: "Слишком много букв"
                   }
                }
-            )} />
+               )} />
 
-         <Button
-            sx={{
-               borderRadius: 1,
-               pr: 5,
-               pl: 5,
-               height: "100%"
-            }}
-            size="small"
-            variant="contained"
-            type={"submit"}>Submit
+            <Button
+               sx={{
+                  borderRadius: 1,
+                  pr: 5,
+                  pl: 5,
+                  height: {
+                     sm:"100%"
+                  }
+               }}
+               size="small"
+               variant="contained"
+               type={"submit"}>Submit
 
-         </Button>
-      </UsersFormElement>}
+            </Button>
+         </UsersFormElement>}
    </Box>
 
 }

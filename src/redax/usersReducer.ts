@@ -2,7 +2,6 @@ import {axiosRequest, friendUnion} from "../dal/api";
 import {IUserOfList} from "../types/types";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppDispatch, RootState} from "../app/redax-store";
-import {Dispatch} from "react";
 
 
 interface IUsersInitialState {

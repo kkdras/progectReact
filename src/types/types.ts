@@ -9,10 +9,6 @@ export type contacts = {
     mainLink: string | null
 }
 
-export type photosType = {
-    small: string | null
-    large: string | null
-}
 
 export interface ISetUserProfile {
     userId: number
@@ -22,16 +18,19 @@ export interface ISetUserProfile {
     contacts: contacts
     aboutMe: string | null
 }
-interface IPartOfUserProfileWithPhoto{
-    photos: photosType
+export interface IUserPhoto{
+    photos: {
+        small: string | null
+        large: string | null
+    }
 }
 
-export type userProfileType = ISetUserProfile & IPartOfUserProfileWithPhoto
+export type userProfileType = ISetUserProfile & IUserPhoto
 
 export interface IUserOfList {
     name: string
     id: number
-    photos: photosType
+    photos: IUserPhoto["photos"]
     followed: boolean
     status: string | null,
     pendingFollow: boolean

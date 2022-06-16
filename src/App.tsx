@@ -1,10 +1,7 @@
-import React, {Suspense, useEffect} from "react";
+import React, {useEffect} from "react";
 import {useDispatch} from "react-redux";
-import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
-import './App.css';
-import Aside from "./components/aside/aside";
-import s from "./Page.module.css";
-import {ProfileContainer} from "./components/profile/profileContainer";
+import {BrowserRouter, LinkProps as RouterLinkProps, NavLink as RouterLink, Route, Routes} from "react-router-dom";
+import {Profile, ProfileRedirect} from "./components/profile/Profile";
 import {HeaderContainer} from "./components/header/headerContainer";
 import Login from "./components/login/login";
 import Loading from "./components/users/loading";
@@ -12,42 +9,57 @@ import {Dialogs} from "./components/dilogs/dialogs"
 import {useTypesSelector} from "./app/hooks";
 import {getUserInfo} from "./redax/authReducer";
 import {Users} from "./components/users/Users";
+import {Wrapper} from "./Wrapper";
+import {LinkProps} from '@mui/material/Link';
+import {createTheme, ThemeProvider} from "@mui/material";
 
+const LinkBehavior = React.forwardRef<any,
+   Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to'] }>((props, ref) => {
+   const {href, ...other} = props;
+   // Map href (MUI) -> to (react-router)
+   return <RouterLink data-testid="custom-link" ref={ref} to={href} {...other} />;
+});
 
-export let App = ({ }) => {
+const theme = createTheme({
+   components: {
+      MuiLink: {
+         defaultProps: {
+            component: LinkBehavior,
+         } as LinkProps,
+      },
+      MuiButtonBase: {
+         defaultProps: {
+            LinkComponent: LinkBehavior,
+         },
+      },
+   },
+});
+
+export let App = () => {
    let isInitialize = useTypesSelector(state => state.auth.isLog)
    let dispatch = useDispatch()
+
    useEffect(() => {
       dispatch(getUserInfo())
    }, [])
+
    if (isInitialize === null) {
-      return <Loading loading={true} />
+      return <Loading loading={true}/>
    }
-   return (
+   return <ThemeProvider theme={theme}>
       <BrowserRouter>
-         <div className="App">
-            <HeaderContainer />
-            <main className={s.page}>
-               <div className={`${s.page__container} _container`}>
-                  <div className={s.page__asideWrapper}>
-                     <Aside />
-                  </div>
-                  <div className={s.page__wrapper}>
-                     <Suspense fallback={<div>загрузка</div>}>
-                        <Switch>
-                           <Redirect exact from="/" to="/profile" />
-                           <Route path={"/dialogs"} render={() => <Dialogs />} />
-                           <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
-                           <Route path={"/users"} render={() => <Users />} />
-                           <Route path={"/login"} render={() => <Login />} />
-                           <Route path={"/!*"} component={() => <div>404 not found</div>} />
-                        </Switch>
-                     </Suspense>
-                  </div>
-               </div>
-            </main>
-            <footer className="footer"></footer>
-         </div>
+         <HeaderContainer/>
+         <Routes>
+            <Route path={"/"} element={<Wrapper/>}>
+               <Route path={"dialogs"} element={<Dialogs/>}/>
+               <Route path={"profile/:userId"} element={<Profile/>}/>
+               <Route path={"profile"} element={<ProfileRedirect/>}/>
+               <Route path={"users"} element={<Users/>}/>
+               <Route path={"login"} element={<Login/>}/>
+               <Route path={"*"} element={<div>404 not found</div>}/>
+               <Route index element={<ProfileRedirect/>}/>
+            </Route>
+         </Routes>
       </BrowserRouter>
-   );
+   </ThemeProvider>
 }
