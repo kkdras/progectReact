@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/progectReact/static/css/main.bd6543d4.chunk.css",
-    "main.js": "/progectReact/static/js/main.efb87d56.chunk.js",
-    "main.js.map": "/progectReact/static/js/main.efb87d56.chunk.js.map",
-    "runtime-main.js": "/progectReact/static/js/runtime-main.b39209a8.js",
-    "runtime-main.js.map": "/progectReact/static/js/runtime-main.b39209a8.js.map",
-    "static/js/2.d1fdab9e.chunk.js": "/progectReact/static/js/2.d1fdab9e.chunk.js",
-    "static/js/2.d1fdab9e.chunk.js.map": "/progectReact/static/js/2.d1fdab9e.chunk.js.map",
-    "static/js/3.d6541a03.chunk.js": "/progectReact/static/js/3.d6541a03.chunk.js",
-    "static/js/3.d6541a03.chunk.js.map": "/progectReact/static/js/3.d6541a03.chunk.js.map",
+    "main.css": "/progectReact/static/css/main.c4efb4a2.chunk.css",
+    "main.js": "/progectReact/static/js/main.2d581b72.chunk.js",
+    "main.js.map": "/progectReact/static/js/main.2d581b72.chunk.js.map",
+    "runtime-main.js": "/progectReact/static/js/runtime-main.4091d8e3.js",
+    "runtime-main.js.map": "/progectReact/static/js/runtime-main.4091d8e3.js.map",
+    "static/js/2.34fbacc4.chunk.js": "/progectReact/static/js/2.34fbacc4.chunk.js",
+    "static/js/2.34fbacc4.chunk.js.map": "/progectReact/static/js/2.34fbacc4.chunk.js.map",
+    "static/js/3.12cf5ab0.chunk.js": "/progectReact/static/js/3.12cf5ab0.chunk.js",
+    "static/js/3.12cf5ab0.chunk.js.map": "/progectReact/static/js/3.12cf5ab0.chunk.js.map",
     "index.html": "/progectReact/index.html",
-    "static/css/main.bd6543d4.chunk.css.map": "/progectReact/static/css/main.bd6543d4.chunk.css.map",
-    "static/js/2.d1fdab9e.chunk.js.LICENSE.txt": "/progectReact/static/js/2.d1fdab9e.chunk.js.LICENSE.txt",
+    "static/css/main.c4efb4a2.chunk.css.map": "/progectReact/static/css/main.c4efb4a2.chunk.css.map",
+    "static/js/2.34fbacc4.chunk.js.LICENSE.txt": "/progectReact/static/js/2.34fbacc4.chunk.js.LICENSE.txt",
     "static/media/1024px-User-avatar.svg.6ca1b977.png": "/progectReact/static/media/1024px-User-avatar.svg.6ca1b977.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.b39209a8.js",
-    "static/js/2.d1fdab9e.chunk.js",
-    "static/css/main.bd6543d4.chunk.css",
-    "static/js/main.efb87d56.chunk.js"
+    "static/js/runtime-main.4091d8e3.js",
+    "static/js/2.34fbacc4.chunk.js",
+    "static/css/main.c4efb4a2.chunk.css",
+    "static/js/main.2d581b72.chunk.js"
   ]
 }
