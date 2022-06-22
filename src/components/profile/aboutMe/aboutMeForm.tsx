@@ -1,11 +1,11 @@
 import React, {FC} from "react";
 import {useForm} from "react-hook-form";
 import {getName} from "../../utils/getName";
-import {useTypesSelector} from "../../../app/hooks";
+import {useAppDispatch, useTypesSelector} from "../../../app/hooks";
 import {putProfileObject, toggleEditMode} from "../../../redax/profileReducer";
-import {Box, Button, FormControl, InputLabel, NativeSelect, styled, TextField} from '@mui/material';
+import {Button, FormControl, InputLabel, NativeSelect, styled, TextField} from '@mui/material';
 import {IErrorType, ISetUserProfile} from "../../../types/types";
-import {useAppDispatch} from "../../../app/redax-store";
+
 
 let FormTag = styled("form")(({theme}) => ({
    p: 1,

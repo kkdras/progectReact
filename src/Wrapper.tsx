@@ -1,17 +1,14 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useTypesSelector } from "./app/hooks";
+import {Outlet} from "react-router-dom";
 import React from "react";
-import { Box } from "@mui/material";
+import {Box} from "@mui/material";
 
 export let Wrapper = () => {
-   let location = useLocation()
-   let isAuth = useTypesSelector(state => state.auth.isLog)
-   if (!isAuth && location.pathname !== "/login") return <Navigate to={"/login"} replace={true} />
 
    return <Box
       component={"main"}
       sx={{
          flex: "1 1 auto",
+         display: "flex",
          paddingTop: "70px"
       }}
    >
@@ -29,7 +26,9 @@ export let Wrapper = () => {
                sm: "0 10px",
                xs: "0 5px"
             },
-            minHeight: "calc(100vh - 70px)"
+            display: "flex",
+            flexDirection: "column",
+            flex: "1 1 auto",
          }}
       >
          <Outlet />

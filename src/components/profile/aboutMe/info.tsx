@@ -7,7 +7,6 @@ import {AboutMe} from "./aboutMe";
 import {ProfileTop} from "./profileTop";
 import img from "./../../../asserts/1024px-User-avatar.svg.png"
 import {toggleEditMode} from "../../../redax/profileReducer";
-import styled from "@emotion/styled";
 import {Box} from "@mui/material";
 
 interface IInfo {
@@ -23,13 +22,14 @@ export let Info: FC<IInfo> = (props) => {
    useEffect(() => {
 
       return () => {
+         //не вызывается если страница перезагружена или закрыт браузер
          dispatch(toggleEditMode(false))
       }
    }, [])
 
 
    if (!userProfile) {
-      return (<Loading loading={true}/>)
+      return (<Loading />)
    } else {
       return (
          <div className={s.infoWrapper}>
@@ -47,6 +47,7 @@ export let Info: FC<IInfo> = (props) => {
                   padding: (theme) => theme.spacing(1),
                   pt: 2,
                   textAlign: "end",
+                  flex: "1 1 auto"
                }}>
                   {edit || <AboutMe isOwn={props.isOwn} {...userProfile} />}
                   {props.isOwn && edit && <AboutForm/>}

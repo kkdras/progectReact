@@ -1,17 +1,18 @@
 import React, {useEffect} from "react";
 import {useDispatch} from "react-redux";
-import {BrowserRouter, LinkProps as RouterLinkProps, NavLink as RouterLink, Route, Routes} from "react-router-dom";
-import {Profile, ProfileRedirect} from "./components/profile/Profile";
+import {HashRouter, LinkProps as RouterLinkProps, NavLink as RouterLink, Route, Routes} from "react-router-dom";
+import {NotFound, Profile, ProfileRedirect} from "./components/profile/Profile";
 import {HeaderContainer} from "./components/header/headerContainer";
-import Login from "./components/login/login";
+import {Login} from "./components/login/login";
 import Loading from "./components/users/loading";
 import {Dialogs} from "./components/dilogs/dialogs"
 import {useTypesSelector} from "./app/hooks";
-import {getUserInfo} from "./redax/authReducer";
+import {getLogUserInfo} from "./redax/authReducer";
 import {Users} from "./components/users/Users";
 import {Wrapper} from "./Wrapper";
 import {LinkProps} from '@mui/material/Link';
 import {createTheme, ThemeProvider} from "@mui/material";
+import {Footer} from "./components/footer/Footer";
 
 const LinkBehavior = React.forwardRef<any,
    Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to'] }>((props, ref) => {
@@ -37,17 +38,19 @@ const theme = createTheme({
 
 export let App = () => {
    let isInitialize = useTypesSelector(state => state.auth.isLog)
+
    let dispatch = useDispatch()
 
    useEffect(() => {
-      dispatch(getUserInfo())
+      dispatch(getLogUserInfo())
    }, [])
 
    if (isInitialize === null) {
-      return <Loading loading={true}/>
+      return <Loading />
    }
+
    return <ThemeProvider theme={theme}>
-      <BrowserRouter>
+      <HashRouter>
          <HeaderContainer/>
          <Routes>
             <Route path={"/"} element={<Wrapper/>}>
@@ -56,10 +59,11 @@ export let App = () => {
                <Route path={"profile"} element={<ProfileRedirect/>}/>
                <Route path={"users"} element={<Users/>}/>
                <Route path={"login"} element={<Login/>}/>
-               <Route path={"*"} element={<div>404 not found</div>}/>
+               <Route path={"*"} element={<NotFound/>}/>
                <Route index element={<ProfileRedirect/>}/>
             </Route>
          </Routes>
-      </BrowserRouter>
+         {isInitialize && <Footer/>}
+      </HashRouter>
    </ThemeProvider>
 }

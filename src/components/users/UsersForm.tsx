@@ -1,7 +1,7 @@
 import React, {FC, memo, useEffect} from "react";
 import {Box, Button, LinearProgress, NativeSelect, styled, TextField} from "@mui/material";
 import {useForm} from "react-hook-form";
-import {useAppDispatch} from "../../app/redax-store";
+
 import {
    applyFilters,
    currentPageSelector,
@@ -11,7 +11,7 @@ import {
    termSelector,
    usersPerPageSelector
 } from "../../redax/usersReducer";
-import {useTypesSelector} from "../../app/hooks";
+import {useAppDispatch, useTypesSelector} from "../../app/hooks";
 import {useSearchParams} from "react-router-dom";
 import {friendUnion} from "../../dal/api";
 
@@ -45,13 +45,14 @@ let splitParams = (searchParams: URLSearchParams, tmp: ISearchParams) => {
 
 
 let UsersFormWoMemo: FC = () => {
-   let { handleSubmit, formState: { errors }, register } = useForm<ISearchFilters>()
-
    let usersPerPage = useTypesSelector(usersPerPageSelector)
    let currentPage = useTypesSelector(currentPageSelector)
    let friend = useTypesSelector(friendSelector)
    let term = useTypesSelector(termSelector)
    let isLoading = useTypesSelector(state => state.usersPage.isLoading)
+
+   let { handleSubmit, formState: { errors }, register, reset } = useForm<ISearchFilters>()
+
 
    let dispatch = useAppDispatch()
 
@@ -88,11 +89,11 @@ let UsersFormWoMemo: FC = () => {
          flag = true
          friendURI = paramsObject.friend as friendUnion
       }
-      if (paramsObject.count &&
-         Number(paramsObject.count) !== count &&
-         !!Number(paramsObject.count)) {
+      if (paramsObject.usersPerPage &&
+         Number(paramsObject.usersPerPage) !== count &&
+         !!Number(paramsObject.usersPerPage)) {
          flag = true
-         count = Number(paramsObject.count)
+         count = Number(paramsObject.usersPerPage)
       }
       if (flag) {
          dispatch(
@@ -117,20 +118,23 @@ let UsersFormWoMemo: FC = () => {
       if (usersPerPage) tmp.append("usersPerPage", String(usersPerPage))
       setSearchParams(tmp, { replace: true })
       dispatch(getUsers())
-
+      reset({
+         friend: friend,
+         usersPerPage: usersPerPage,
+         term: term
+      })
    }, [currentPage, usersPerPage, term, friend])
 
-
-   debugger
    return <Box
       sx={{
          display: "flex",
-         mt: 1,
-         mb: 1,
+         pt: 1,
+         pb: 1,
+
       }}>
       {isLoading ? <LinearProgress sx={{ flex: "1 1 auto" }} /> :
          <UsersFormElement onSubmit={handleSubmit(onSubmit)}>
-            <NativeSelect defaultValue={friend}
+            <NativeSelect
                sx={{
                   mr: 1,
                   ml: 1,
@@ -139,7 +143,7 @@ let UsersFormWoMemo: FC = () => {
                      xs: "1 1 auto"
                   }
                }}
-               {...register("friend")}
+               {...register("friend",{value: friend})}
 
             >
                <option value="">All</option>
@@ -156,8 +160,8 @@ let UsersFormWoMemo: FC = () => {
                   },
                   width: "50px",
                }}
-               {...register("usersPerPage")}
-               defaultValue={usersPerPage}
+               {...register("usersPerPage",{value: usersPerPage})}
+
             >
                {[5, 10, 15, 20, 25].map(item => <option key={item} value={item}>{item}</option>)}
             </NativeSelect>

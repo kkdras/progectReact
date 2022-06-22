@@ -55,7 +55,8 @@ export let AboutMe: FC<userProfileType & {isOwn: boolean}> = (
                   <span>{fullName}</span>
                </Item>
             </Grid>
-            {Object.entries(contacts).map((item) => <Grid
+            {Object.entries(contacts).map((item, i) => <Grid
+               key={i}
                spacing={2}
                item xs={12} sm={6}>
                <Item>

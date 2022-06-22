@@ -19,6 +19,8 @@ let Header = styled("header")({
 
 export let HeaderContainer = () => {
    let images = useTypesSelector(state => state.auth.photos)
+   let isLog = useTypesSelector(state => state.auth.isLog)
+
    return (
       <>
          <Header>
@@ -53,9 +55,10 @@ export let HeaderContainer = () => {
                         }
                      }} variant="contained" size="small"
                              href="/profile">
-                        Profile
+                        {isLog ? "Profile" : "Login"}
                      </Button>
-                     <Button sx={{
+                     <Button
+                        sx={{
                         marginRight: {
                            xs: "5px",
                            sm: "10px"
@@ -80,23 +83,4 @@ export let HeaderContainer = () => {
    )
 }
 
-
-// interface IMyLink {
-//    path: string
-// }
-// let MyLink: FC<IMyLink> = ({ path }) => {
-//    return <NavLink to={path} className={({ isActive }) => `${isActive ? sa.aside__active : ""} ${sa.aside__link}`}>Главная</NavLink>
-// }
-// <div className={s.header}>
-//    <div className={`${s.header__container} _container`}>
-//       <a href="#" className={`${s.header__logo} _ibg`}>
-//          <img src="https://old-corp.qiwi.com/dam/jcr:75d303a3-c579-4fb4-be4c-258da7f2a05f/qiwi_logo_rgb_small.png" alt="" />
-//       </a>
-//       <a href={"#"} className={s.header__title}>
-//          {isLog?
-//             <button onClick={() => dispatch(logout())}>logout</button>
-//             : "Go to log"}
-//       </a>
-//    </div>
-// </div>
 

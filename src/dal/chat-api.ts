@@ -9,6 +9,8 @@ export interface IMessage {
 }
 
 let ws: WebSocket | null = null
+let _timerId: ReturnType<typeof setTimeout> | null = null
+
 
 let cleanUp = () => {
     ws?.removeEventListener("open",openHandler)
@@ -18,22 +20,18 @@ let cleanUp = () => {
 }
 
 let openHandler = () => {
-    console.log("open")
     notifyStatusSubscribers("ready")
 }
 let messageHandler = (event: MessageEvent) => {
-    console.log("MESSAGE")
     let newMessage = JSON.parse(event.data)
     subscribers["message-received"].forEach(item => item(newMessage))
 };
 let errorHandler = () => {
-    console.log("error")
     notifyStatusSubscribers("error")
 }
 let closeHandler = () => {
-    console.log("close")
     notifyStatusSubscribers("pending")
-    setTimeout(createChannel,3000)
+    _timerId = setTimeout(createChannel,3000)
 }
 
 let notifyStatusSubscribers = (status: statusType) => {
@@ -59,10 +57,6 @@ export type StatusObs = (status: statusType) => void
 
 export type eventType = "message-received" | "status-changed"
 
-// interface SDep {
-//     "message-received": MessageObs
-//     "status-changed": StatusObs
-// }
 
 interface ISubscribers{
     "message-received": MessageObs[]
@@ -99,6 +93,7 @@ export let ChatApi = {
         subscribers["status-changed"] = []
         cleanUp()
         ws?.close()
+        if(_timerId) clearTimeout(_timerId)
     }
 }
 

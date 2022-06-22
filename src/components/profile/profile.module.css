@@ -15,7 +15,7 @@
 
 }
 .infoWrapper{
-    min-height: calc(100vh - 70px);
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
 }

@@ -2,13 +2,9 @@ import styles from "./users.module.css";
 import unnamed from "../../asserts/unnamed.gif";
 import {FC} from "react";
 
-type propsType = {
-    loading: boolean
-}
-
-let Loading:FC<propsType> = ({loading}) =>{
+let Loading:FC = () =>{
     return (<div className={styles.loadingContainer}>
-            {loading ? <img className={styles.loadingGif} src={unnamed} alt=""/> : null }
+             <img className={styles.loadingGif} src={unnamed} alt=""/>
         </div>)
 }
 export default Loading

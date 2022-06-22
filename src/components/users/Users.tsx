@@ -1,13 +1,19 @@
 import {useTypesSelector} from "../../app/hooks";
 import React, {FC} from "react";
-import {Box} from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import {User} from "./User";
 import {MyPagination} from "./MyPagination";
 import {UsersForm} from "./UsersForm";
+import {Discklamer} from "../profile/Profile";
 
 
 export let Users: FC = () => {
    let usersId = useTypesSelector(state => state.usersPage.usersID)
+   let isInitialize = useTypesSelector(state => state.auth.isLog)
+
+   if (isInitialize === false){
+      return <Discklamer />
+   }
    return (
       <>
          <UsersForm/>

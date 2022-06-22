@@ -32,7 +32,7 @@ type AuthLoginDataType = {
    login: string
 }
 
-type AuthMeDataType = {
+export interface IAuth {
    userId: number
 }
 
@@ -47,17 +47,19 @@ type SetPhotoDataType = {
 }
 export type friendUnion = "true" | "false" | ""
 
+
 export let axiosRequest = {
    auth: {
       getLogUser(){
          return instance.get<IRespType<AuthLoginDataType>>(`auth/me`).then(response => response.data)
       },
       login(email: string,password:string,rememberMe:boolean,captcha: null | string = null){
-         return instance.post<IRespType<AuthMeDataType,ResultCodeLoginCreator | ResultCode>>(`auth/login`,{email,password,rememberMe,captcha})
+
+         return instance.post<IRespType<IAuth, ResultCodeLoginCreator | ResultCode>>(`auth/login`,{email,password,rememberMe,captcha})
             .then(response => response.data)
       },
       logout(){
-         return instance.delete<IRespType<AuthMeDataType,ResultCodeLoginCreator | ResultCode>>(`auth/login`)
+         return instance.delete<IRespType<IAuth, ResultCodeLoginCreator | ResultCode>>(`auth/login`)
             .then(response => response.data)
       },
       getCaptcha(){
