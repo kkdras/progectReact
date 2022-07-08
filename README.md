@@ -14,12 +14,12 @@
 
 Весь контент в приложении подгружается динамически. 
 
-## Стек: 
-React(CRA) \
-Redux-toolkit \
-Typescript \
-Material UI \
-React-hook-form \
-Websocket \
-Axios \
-React-Router
+Стек: 
+- React(CRA) 
+- Redux-toolkit 
+- Typescript 
+- Material UI 
+- React-hook-form 
+- Websocket 
+- Axios 
+- React-Router
