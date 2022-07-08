@@ -15,7 +15,7 @@
 Весь контент в приложении подгружается динамически. 
 
 ## Стек: 
-React \
+React(CRA) \
 Redux-toolkit \
 Typescript \
 Material UI \
